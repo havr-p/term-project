@@ -1,14 +1,15 @@
 package graphs;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class OutgoingLabelingIterator implements Iterator<Map<Integer, Integer>> {
     private final int MAX_FLOW_VALUE;
-    private int inFlowSum;
-    private Map<Integer, Integer> outgoingEdgesLabeling = new HashMap<>();
-    private Map<Integer, Integer> capacityConstraints;
-    private final int possibleOptionsCount;
+    private final int inFlowSum;
+    private final Map<Integer, Integer> outgoingEdgesLabelling = new HashMap<>();
+    private final Map<Integer, Integer> capacityConstraints;
+    private final int MAX_OPTION, RADIX;
     private int currentOption = 0;
     private final int neighboursCount;
 
@@ -18,81 +19,93 @@ public class OutgoingLabelingIterator implements Iterator<Map<Integer, Integer>>
         this.inFlowSum = inFlowSum;
         for (Integer neighbour :
                 capacityConstraints.keySet()) {
-            outgoingEdgesLabeling.put(neighbour, 0);
+            outgoingEdgesLabelling.put(neighbour, 0);
         }
+       // System.out.println(outgoingEdgesLabeling);
         this.neighboursCount = capacityConstraints.size();
-        this.possibleOptionsCount = (int) Math.pow(MAX_FLOW_VALUE + 1, neighboursCount) - 1;
+        this.RADIX = MAX_FLOW_VALUE + 1;
+        this.MAX_OPTION = (int) Math.pow(RADIX, neighboursCount) - 1;
+        for (int deg = 0; deg < neighboursCount; deg++) {
+            currentOption += (int) Math.pow(RADIX, deg);
+        }
         this.capacityConstraints = capacityConstraints;
     }
-
-    private boolean constrainedNowhere0() {
-        for (Integer key:
-             outgoingEdgesLabeling.keySet()) {
-            if (outgoingEdgesLabeling.get(key) > capacityConstraints.get(key) ||
-                outgoingEdgesLabeling.get(key) == 0) return false;
+    //depends on map
+    private boolean constrained() {
+        for (Integer key :
+                outgoingEdgesLabelling.keySet()) {
+            if (outgoingEdgesLabelling.get(key) > capacityConstraints.get(key)) return false;
         }
         return true;
     }
+//depends on map
+    private boolean nowhere0() {
+        return !outgoingEdgesLabelling.containsValue(0);
+    }
 
+    private boolean isNextOption() {
+        return (currentOption < MAX_OPTION);
+    }
+    //depends on map
+    private boolean vertexPreservesFlow() {
+        return inFlowSum == getSumFromOption();
+    }
 
+    private String labellingsString() {
+        return Integer.toString(currentOption, RADIX);
+    }
 
     private void setOutgoingEdgesLabeling() {
-        String labelings = Integer.toString(currentOption, MAX_FLOW_VALUE + 1);
-        int padding = neighboursCount - labelings.length();
-        Stack<Integer> labeling = new Stack<>();
-        labeling.addAll(Collections.nCopies(padding, 0));
+       // char[] charLabellings = labellingsString().toCharArray();
+       // int padding = neighboursCount - charLabellings.length;
+        if (currentOption > MAX_OPTION) throw new UnsupportedOperationException();
+        Stack<Integer> labeling = labellingsString().chars().mapToObj(Character::getNumericValue)
+                .collect(Collectors.toCollection(Stack<Integer>::new));
 
-        //System.out.println(labelings + " " + currentOption);
-        char[] charLabellings = labelings.toCharArray();
-        for (char charLabelling : charLabellings) {
-            labeling.add(Character.getNumericValue(charLabelling));
-        }
-        //System.out.println(Arrays.toString(labeling));
-        outgoingEdgesLabeling.replaceAll((t, v) -> labeling.pop());
-        //System.out.println(outgoingEdgesLabeling);
+        int padding = neighboursCount - labeling.size();
+        for (int i = 0; i < padding; i++) labeling.add(0, 0);
+
+        outgoingEdgesLabelling.replaceAll((t, v) -> labeling.pop());
+
     }
 
     private int getSumFromOption() {
-        String labelings = Integer.toString(currentOption, MAX_FLOW_VALUE + 1);
-       // System.out.println(labelings);
-        int sum = 0;
-        for (int value :
-                labelings.toCharArray()) {
-            sum += Character.getNumericValue(value);
-        }
-        //System.out.println(sum + " " + inFlowSum);
-        return sum;
+
+        return outgoingEdgesLabelling.values()
+                                     .stream()
+                                     .mapToInt(Integer::intValue).sum();
     }
 
     @Override
     public boolean hasNext() {
-        setOutgoingEdgesLabeling();
-        //System.out.println(getSumFromOption());
-        while ((currentOption < possibleOptionsCount)
-                && !(getSumFromOption() == inFlowSum
-                && constrainedNowhere0())) {
-            currentOption++;
+        try {
             setOutgoingEdgesLabeling();
+        } catch (UnsupportedOperationException exception) {
+            return false;
         }
-        return ((currentOption <= possibleOptionsCount)
-                && (getSumFromOption() == inFlowSum)
-                && constrainedNowhere0());
+        //important! hasNext() may change outgoingEdgesLabeling
+
+        //System.out.println(currentOption);
+        while (currentOption < MAX_OPTION) {
+            if (constrained() && vertexPreservesFlow() && nowhere0()
+                ) {
+                return true;
+            } else {
+                currentOption++;
+                setOutgoingEdgesLabeling();
+            }
+        }
+        return (constrained() && vertexPreservesFlow() && nowhere0());
     }
+
 
     @Override
     public Map<Integer, Integer> next() {
-        //get current labeling in a string
-        //System.out.println("next call");
-        //System.out.println(inFlowSum);
+        if (currentOption <= MAX_OPTION) setOutgoingEdgesLabeling();
         currentOption++;
-        return outgoingEdgesLabeling;
+
+        return outgoingEdgesLabelling;
     }
 
-    public static void main(String[] args) {
-        OutgoingLabelingIterator iterator = new OutgoingLabelingIterator(4, 4,
-                Map.of(1, 4, 2, 2, 3, 1));
-        while (iterator.hasNext()) {
-            System.out.println(iterator.next());
-        }
-    }
+
 }
