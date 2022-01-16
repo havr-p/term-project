@@ -1,9 +1,10 @@
 package graphs;
 
-public interface FlowNetworkInterface extends DirectedGraph {
+public interface FlowNetworkInterface extends Graph {
     int source();
 
     int sink();
+
 
     boolean addEdge(int from, int to, int capacity);
 

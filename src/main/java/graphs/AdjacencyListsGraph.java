@@ -54,6 +54,7 @@ public class AdjacencyListsGraph implements DirectedGraph {
 
     @Override
     public Iterable<Integer> adjVertices(int from) {
+       // System.out.println(from);
         // Zoznam adjLists.get(from) "obalime" tak, aby sa nedal menit:
         return Collections.unmodifiableList(adjLists.get(from));
     }
