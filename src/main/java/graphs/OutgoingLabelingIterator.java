@@ -3,6 +3,11 @@ package graphs;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * This iterator allows to generate every possible labeling for outgoing edges of the vertex. Maximum number of outgoing
+ * edges is 36 (due to labellingsString() method)
+ */
+
 
 public class OutgoingLabelingIterator implements Iterator<Map<Integer, Integer>> {
     private final int MAX_FLOW_VALUE;
@@ -21,7 +26,7 @@ public class OutgoingLabelingIterator implements Iterator<Map<Integer, Integer>>
                 capacityConstraints.keySet()) {
             outgoingEdgesLabelling.put(neighbour, 0);
         }
-       // System.out.println(outgoingEdgesLabeling);
+
         this.neighboursCount = capacityConstraints.size();
         this.RADIX = MAX_FLOW_VALUE + 1;
         this.MAX_OPTION = (int) Math.pow(RADIX, neighboursCount) - 1;
@@ -30,7 +35,7 @@ public class OutgoingLabelingIterator implements Iterator<Map<Integer, Integer>>
         }
         this.capacityConstraints = capacityConstraints;
     }
-    //depends on map
+    //depends on map outgoingEdgesLabelling
     private boolean constrained() {
         for (Integer key :
                 outgoingEdgesLabelling.keySet()) {
@@ -38,26 +43,21 @@ public class OutgoingLabelingIterator implements Iterator<Map<Integer, Integer>>
         }
         return true;
     }
-//depends on map
+    //depends on map outgoingEdgesLabelling
     private boolean nowhere0() {
         return !outgoingEdgesLabelling.containsValue(0);
     }
 
-    private boolean isNextOption() {
-        return (currentOption < MAX_OPTION);
-    }
-    //depends on map
+    //depends on map outgoingEdgesLabelling
     private boolean vertexPreservesFlow() {
         return inFlowSum == getSumFromOption();
     }
-
+    //RADIX cannot be greater than 36
     private String labellingsString() {
         return Integer.toString(currentOption, RADIX);
     }
 
     private void setOutgoingEdgesLabeling() {
-       // char[] charLabellings = labellingsString().toCharArray();
-       // int padding = neighboursCount - charLabellings.length;
         if (currentOption > MAX_OPTION) throw new UnsupportedOperationException();
         Stack<Integer> labeling = labellingsString().chars().mapToObj(Character::getNumericValue)
                 .collect(Collectors.toCollection(Stack<Integer>::new));
@@ -66,18 +66,18 @@ public class OutgoingLabelingIterator implements Iterator<Map<Integer, Integer>>
         for (int i = 0; i < padding; i++) labeling.add(0, 0);
 
         outgoingEdgesLabelling.replaceAll((t, v) -> labeling.pop());
-
     }
 
     private int getSumFromOption() {
 
         return outgoingEdgesLabelling.values()
-                                     .stream()
-                                     .mapToInt(Integer::intValue).sum();
+                .stream()
+                .mapToInt(Integer::intValue).sum();
     }
 
     @Override
     public boolean hasNext() {
+        if (inFlowSum < neighboursCount) return false;
         try {
             setOutgoingEdgesLabeling();
         } catch (UnsupportedOperationException exception) {
@@ -85,27 +85,23 @@ public class OutgoingLabelingIterator implements Iterator<Map<Integer, Integer>>
         }
         //important! hasNext() may change outgoingEdgesLabeling
 
-        //System.out.println(currentOption);
         while (currentOption < MAX_OPTION) {
-            if (constrained() && vertexPreservesFlow() && nowhere0()
-                ) {
+            if (constrained() && vertexPreservesFlow() && nowhere0()) {
                 return true;
             } else {
                 currentOption++;
                 setOutgoingEdgesLabeling();
             }
         }
+
         return (constrained() && vertexPreservesFlow() && nowhere0());
     }
 
 
     @Override
     public Map<Integer, Integer> next() {
-        if (currentOption <= MAX_OPTION) setOutgoingEdgesLabeling();
         currentOption++;
-
         return outgoingEdgesLabelling;
     }
-
 
 }

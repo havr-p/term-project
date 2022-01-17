@@ -47,11 +47,6 @@ public class AdjListsFlowNetwork extends AdjacencyListsGraph implements FlowNetw
 
     /**
      * Prida do sieti hranu, veducu z vrchola from do vrchola to s kapacitou capacity
-     *
-     * @param from
-     * @param to
-     * @param capacity
-     * @return
      */
 
     @Override
@@ -66,11 +61,7 @@ public class AdjListsFlowNetwork extends AdjacencyListsGraph implements FlowNetw
         return true;
     }
 
-    /**
-     * @param from
-     * @param to
-     * @return
-     */
+
 
     @Override
     public int getCapacity(int from, int to) {
@@ -90,6 +81,7 @@ public class AdjListsFlowNetwork extends AdjacencyListsGraph implements FlowNetw
                 capacities.get(from).put(to, capacity);
             } else throw new IllegalArgumentException("This edge does not exist");
         } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
             return false;
         }
         return true;
@@ -110,9 +102,4 @@ public class AdjListsFlowNetwork extends AdjacencyListsGraph implements FlowNetw
         return s.toString();
     }
 
-    public static void main(String[] args) {
-        NetworkFactory networkFactory = new NetworkFactory();
-        FlowNetworkInterface network = networkFactory.createNetworkFromInput();
-        System.out.println(network);
-    }
 }

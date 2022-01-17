@@ -20,38 +20,9 @@ public class NetworkFactory {
         return flowNetwork;
     }
 
-    public void addRandomEdges(FlowNetworkInterface flowNetwork, int from, Random random) {
-        int source = flowNetwork.source();
-        int sink = flowNetwork.sink();
-        int maxCapacity = flowNetwork.maxCapacity();
-        int numOfVertices = flowNetwork.getNumberOfVertices();
-        if (from == source) {
-            int edgesFromSourceCount = random.nextInt(1,numOfVertices - 1);
-            for (int i = 0; i < edgesFromSourceCount; i++) {
-                flowNetwork.addEdge(source, random.nextInt(1,numOfVertices - 1),
-                        random.nextInt(maxCapacity));
-            }
-        }
-        else if (from != sink) {
-
-        }
-    }
 
     public FlowNetworkInterface createRandomNetwork() {
-        Random random = new Random();
-        FlowNetworkInterface flowNetwork = createNetworkTemplate();
-
-        //adding edges
-
-        /*
-        algorithm for adding edges:
-        firstly we should add some edges from source
-        how many? max numOfVertices-1
-
-         */
         return null;
-
-
     }
 
     public FlowNetworkInterface createNetworkFromInput() {

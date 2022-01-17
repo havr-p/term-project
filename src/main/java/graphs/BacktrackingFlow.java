@@ -22,8 +22,6 @@ public class BacktrackingFlow {
 
     public BacktrackingFlow(FlowNetworkInterface flowNetwork, int sourceFlowSum, int MAX_FLOW_VALUE) {
         for (int i = 0; i < flowNetwork.getNumberOfVertices(); i++) {
-            //why would we hypothetically need flows from sink? it has no outgoing edges
-            //if (i != flowNetwork.sink())
             flow.add(new HashMap<>());
         }
         this.flowNetwork = flowNetwork;
@@ -31,7 +29,14 @@ public class BacktrackingFlow {
         this.sourceFlowSum = sourceFlowSum;
         this.MAX_FLOW_VALUE = MAX_FLOW_VALUE;
     }
-    
+
+    public boolean isNowhere0(List<Map<Integer, Integer>> flow) {
+        for (Map<Integer, Integer> edgeFlow:
+             flow) {
+            if (edgeFlow.containsValue(0)) return false;
+        }
+        return true;
+    }
 
     public int getEdgeFlow(int from, int to) {
         return flow.get(from).get(to);
@@ -77,7 +82,7 @@ public class BacktrackingFlow {
                     if (outgoingEdgesLabeling.get(to) <= flowNetwork.getCapacity(from, to)) {
                         int flowValue = outgoingEdgesLabeling.get(to);
                         flow.get(from).put(to, flowValue);
-                       // flow.get(to).put(from, -flowValue);
+                        // flow.get(to).put(from, -flowValue);
                     } else {
                         throw new IllegalArgumentException("Wrong flow: flow cannot be greater than the capacity");
                     }
@@ -98,15 +103,18 @@ public class BacktrackingFlow {
      */
 
     public void getNowhere0Flows(int from, List<List<Map<Integer, Integer>>> flowList) {
-        System.out.println(flow);
         int inFlowSum = flowSumInVertex(from);
 
         if (from == flowNetwork.sink()) {
             if (flowSumInVertex(from) == sourceFlowSum) {
-                printFlow();
-                System.out.println();
-                if (flowList != null)
-                flowList.add(Collections.unmodifiableList(flow));
+
+
+                if (flowList != null && isNowhere0(flow)) {
+                    List<Map<Integer, Integer>> newFlow = new ArrayList<>(flow);
+                    flowList.add(Collections.unmodifiableList(newFlow));
+                    initializeFlow();
+
+                }
             }
         } else {
             List<Integer> adjVertices = new ArrayList<>();

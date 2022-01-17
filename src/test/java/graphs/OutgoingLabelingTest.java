@@ -10,18 +10,16 @@ import java.util.*;
 
 public class OutgoingLabelingTest {
     private OutgoingLabelingIterator iterator1;
+    List<Map<Integer, Integer>> labelings = new ArrayList<>();
 
-  /*  @Before
+    @Before
     public void setUp() {
-        System.out.println("This code executes before each test method");
-        iterator1 = new OutgoingLabelingIterator(4, 4,
-                Map.of(1, 2, 2, 2));
-
-    }*/
+        labelings.clear();
+    }
 
     @Test
     public void simplestLabelingTest() {
-        List<Map<Integer, Integer>> labelings = new ArrayList<>();
+
         iterator1 = new OutgoingLabelingIterator(4, 4,
                 Map.of(1, 4));
         while (iterator1.hasNext()) {
@@ -31,8 +29,26 @@ public class OutgoingLabelingTest {
     }
 
     @Test
+    public void tooBigInFlowTest() {
+        iterator1 = new OutgoingLabelingIterator(4, 6,
+                Map.of(1, 4));
+        while (iterator1.hasNext()) {
+            labelings.add(new HashMap<>(iterator1.next()));
+        }
+        assertTrue(labelings.isEmpty());
+    }
+
+    @Test
+    public void tooSmallInFlowTest() {
+        iterator1 = new OutgoingLabelingIterator(3, 1, Map.of(3, 1,
+                                                                                      4, 1,
+                                                                                      6, 1));
+        while ((iterator1.hasNext())) labelings.add(new HashMap<>(iterator1.next()));
+        assertTrue(labelings.isEmpty());
+    }
+
+    @Test
     public void OutgoingLabelingTest1() {
-        List<Map<Integer, Integer>> labelings = new ArrayList<>();
         iterator1 = new OutgoingLabelingIterator(4, 4,
                 Map.of(1, 2, 2, 2));
         while (iterator1.hasNext()) {
@@ -49,12 +65,12 @@ public class OutgoingLabelingTest {
         while (iterator2.hasNext()) {
             labelings.add(new HashMap<>(iterator2.next()));
         }
+
         assertThat(labelings.size(), is(3));
 
         assertTrue(labelings.contains(Map.of(1, 3, 2, 4, 3, 4)));
         assertTrue(labelings.contains(Map.of(1, 4, 2, 3, 3, 4)));
         assertTrue(labelings.contains(Map.of(1, 4, 2, 4, 3, 3)));
-        labelings.clear();
     }
 
 }
