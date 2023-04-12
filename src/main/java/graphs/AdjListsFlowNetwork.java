@@ -5,16 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/*TODO Na vytvorenie nahodnej siete treba pridat mechanizmus overenia, ci vysledny graf
-    je suvisly a ci naozaj ziadna hrana nevchadza do zdroju a ziadna hrana z ustia nevychadza (vsetky cesty sa zacinaju
-    v zdroje a sa koncia v usti)
-    Nasobne hrany su zakazane
- */
 
-public class AdjListsFlowNetwork extends AdjacencyListsGraph implements FlowNetworkInterface {
+public class AdjListsFlowNetwork extends AdjacencyListsGraph implements FlowNetwork {
     //two vertices, representing the flow source and the flow sink
-    private final Integer source;
-    private final Integer sink;
     private final Integer maxCapacity;
 
     /**
@@ -23,27 +16,15 @@ public class AdjListsFlowNetwork extends AdjacencyListsGraph implements FlowNetw
      */
     private final List<Map<Integer, Integer>> capacities;
 
-    public AdjListsFlowNetwork(int numVertices, int maxCapacity, int source, int sink) {
+    public AdjListsFlowNetwork(int numVertices, int maxCapacity) {
         super(numVertices);
         this.maxCapacity = maxCapacity;
-        this.source = source;
-        this.sink = sink;
         capacities = new ArrayList<>();
         for (int i = 0; i < numVertices; i++) {
             capacities.add(new HashMap<Integer, Integer>());
         }
     }
 
-
-    @Override
-    public int source() {
-        return source;
-    }
-
-    @Override
-    public int sink() {
-        return sink;
-    }
 
     /**
      * Prida do sieti hranu, veducu z vrchola from do vrchola to s kapacitou capacity
@@ -52,7 +33,7 @@ public class AdjListsFlowNetwork extends AdjacencyListsGraph implements FlowNetw
     @Override
     public boolean addEdge(int from, int to, int capacity) {
         if (existsEdge(from, to)) {
-            System.out.println("This edge is already exists");
+            System.out.println("This edge already exists");
             return false;
         } else {
             addEdge(from, to);
@@ -90,13 +71,11 @@ public class AdjListsFlowNetwork extends AdjacencyListsGraph implements FlowNetw
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        System.out.println("source: " + this.source());
-        System.out.println("sink: " + this.sink());
         for (int from = 0; from < getNumberOfVertices(); from++) {
-            s.append("Edges from " + from + ":\n");
+            s.append("Edges from ").append(from).append(":\n");
             for (Integer to :
                     adjVertices(from)) {
-                s.append("    " + from + " " + getCapacity(from, to) + "> " + to + '\n');
+                s.append("    ").append(from).append(" ").append(getCapacity(from, to)).append("> ").append(to).append('\n');
             }
         }
         return s.toString();

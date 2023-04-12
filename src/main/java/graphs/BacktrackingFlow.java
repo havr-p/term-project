@@ -6,8 +6,7 @@ import java.util.*;
  * Trieda Flow reprezentuje celociselnu funkciu toku f: V x V -> Z, definovanu na mnozine hran E, pre ktoru plati:
  * 1. 0 =< f(v, u) <= capacity(v, u) pre ∀ (v, u) ∈ E
  * 2. ∑(f(u, w)) = 0, pre ∀ (u, w) ∈ E,  u != zdroj && u != ustie
- * 3. ∑(f(z, w)) = ∑(f(w, u)) = V; z = zdroj, u = ustie, V = velkost toku, ∀w ∈ V \ {z, u}
- * 4. f(u, v) = -f(v, u);
+ * 3. f(u, v) = -f(v, u);
  * <p>
  * Nikde nenulovy k-tok je take ohodnotenie hran sieti, kde kazda hrana je hodnotena cislom zo Zk\{0}.
  */
@@ -17,16 +16,14 @@ public class BacktrackingFlow {
     private final int MAX_FLOW_VALUE;
     //represents flow, maps neighbours of vertex to the values of flow pointing to neighbours
     private final List<Map<Integer, Integer>> flow = new ArrayList<>();
-    private final FlowNetworkInterface flowNetwork;
-    private final int sourceFlowSum;
+    private final FlowNetwork flowNetwork;
 
-    public BacktrackingFlow(FlowNetworkInterface flowNetwork, int sourceFlowSum, int MAX_FLOW_VALUE) {
+    public BacktrackingFlow(FlowNetwork flowNetwork, int sourceFlowSum, int MAX_FLOW_VALUE) {
         for (int i = 0; i < flowNetwork.getNumberOfVertices(); i++) {
             flow.add(new HashMap<>());
         }
         this.flowNetwork = flowNetwork;
         initializeFlow();
-        this.sourceFlowSum = sourceFlowSum;
         this.MAX_FLOW_VALUE = MAX_FLOW_VALUE;
     }
 
@@ -61,15 +58,12 @@ public class BacktrackingFlow {
 
     public int flowSumInVertex(int to) {
         int flowSum = 0;
-        if (to == flowNetwork.source()) return sourceFlowSum;
-        else {
             for (Map<Integer, Integer> edgeFlow :
                     flow) {
                 if (edgeFlow.containsKey(to)) {
                     flowSum += edgeFlow.get(to);
                 }
             }
-        }
         return flowSum;
     }
 
@@ -82,7 +76,6 @@ public class BacktrackingFlow {
                     if (outgoingEdgesLabeling.get(to) <= flowNetwork.getCapacity(from, to)) {
                         int flowValue = outgoingEdgesLabeling.get(to);
                         flow.get(from).put(to, flowValue);
-                        // flow.get(to).put(from, -flowValue);
                     } else {
                         throw new IllegalArgumentException("Wrong flow: flow cannot be greater than the capacity");
                     }
@@ -101,41 +94,36 @@ public class BacktrackingFlow {
     /**
      * @param from - vertex, from which we continue to compute required network flow
      */
-
     public void getNowhere0Flows(int from, List<List<Map<Integer, Integer>>> flowList) {
         int inFlowSum = flowSumInVertex(from);
 
-        if (from == flowNetwork.sink()) {
-            if (flowSumInVertex(from) == sourceFlowSum) {
-
-
-                if (flowList != null && isNowhere0(flow)) {
-                    List<Map<Integer, Integer>> newFlow = new ArrayList<>(flow);
-                    flowList.add(Collections.unmodifiableList(newFlow));
-                    initializeFlow();
-
-                }
-            }
-        } else {
-            List<Integer> adjVertices = new ArrayList<>();
-            flowNetwork.adjVertices(from).forEach(adjVertices::add);
-
-            Map<Integer, Integer> capacityConstraints = new HashMap<>();
-            for (Integer to :
-                    adjVertices) {
-                capacityConstraints.put(to, flowNetwork.getCapacity(from, to));
-            }
-
-            OutgoingLabelingIterator iterator = new OutgoingLabelingIterator(MAX_FLOW_VALUE, inFlowSum, capacityConstraints);
-            while (iterator.hasNext()) {
-                setVertexFlow(from, iterator.next());
-                for (Integer to :
-                        adjVertices) {
-                    getNowhere0Flows(to, flowList);
-                }
-            }
-        }
     }
+
+    /**
+     * Computes and returns the capacity constraints map for the given vertex.
+     */
+    private Map<Integer, Integer> getCapacityConstraints(int vertex) {
+        Map<Integer, Integer> capacityConstraints = new HashMap<>();
+        for (int to : flowNetwork.adjVertices(vertex)) {
+            capacityConstraints.put(to, flowNetwork.getCapacity(vertex, to));
+        }
+        return capacityConstraints;
+    }
+
+    /**
+     * Generates and returns a sequence of possible flow values for the given vertex based on the given capacity constraints and in-flow sum.
+     */
+    private Iterator<Map<Integer, Integer>> generateFlowValues(int inFlowSum, Map<Integer, Integer> capacityConstraints) {
+        return new OutgoingLabelingIterator(MAX_FLOW_VALUE, inFlowSum, capacityConstraints);
+    }
+
+    /**
+     * Sets the flow value for the given vertex in the flow network.
+     */
+    private void setVertexFlow(int vertex, int flowValue) {
+        flow.get(vertex).replaceAll((to, flow) -> flowValue);
+    }
+
 
     public void printFlow() {
         for (int from = 0; from < flowNetwork.getNumberOfVertices(); from++) {

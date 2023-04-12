@@ -1,11 +1,10 @@
 package graphs;
 
-import java.util.Random;
 import java.util.Scanner;
 
 public class NetworkFactory {
 
-    public FlowNetworkInterface createNetworkTemplate() {
+    public FlowNetwork createNetworkTemplate() {
         Scanner in = new Scanner(System.in);
         System.out.println("Set number of vertices:");
         int numOfVertices = in.nextInt();
@@ -14,20 +13,18 @@ public class NetworkFactory {
         System.out.println("Set maximal capacity:");
         int maxCapacity = in.nextInt();
         System.out.println("Set the source and the sink:");
-        int source = in.nextInt();
-        int sink = in.nextInt();
-        FlowNetworkInterface flowNetwork = new AdjListsFlowNetwork(numOfVertices, maxCapacity, source, sink);
+        FlowNetwork flowNetwork = new AdjListsFlowNetwork(numOfVertices, maxCapacity);
         return flowNetwork;
     }
 
 
-    public FlowNetworkInterface createRandomNetwork() {
+    public FlowNetwork createRandomNetwork() {
         return null;
     }
 
-    public FlowNetworkInterface createNetworkFromInput() {
+    public FlowNetwork createNetworkFromInput() {
 
-        FlowNetworkInterface flowNetwork = createNetworkTemplate();
+        FlowNetwork flowNetwork = createNetworkTemplate();
         Scanner in = new Scanner(System.in);
         System.out.println("Input edges:");
         for (int i = 0; i < flowNetwork.getNumberOfEdges(); i++) {

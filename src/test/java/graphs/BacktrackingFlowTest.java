@@ -45,7 +45,7 @@ public class BacktrackingFlowTest {
 
     @Test
     public void simplestBactrackingFlowTest() {
-        FlowNetworkInterface flowNetwork = new AdjListsFlowNetwork(2, 4, 0, 1);
+        FlowNetwork flowNetwork = new AdjListsFlowNetwork(2, 4);
         flowNetwork.addEdge(0, 1, 4);
         BacktrackingFlow flow = new BacktrackingFlow(flowNetwork, 1, 4);
         flow.getNowhere0Flows(0, flows);
@@ -55,7 +55,7 @@ public class BacktrackingFlowTest {
     }
     @Test
     public void BactrackingFlowTest1() {
-        FlowNetworkInterface flowNetwork2 = new AdjListsFlowNetwork(3, 4, 0, 2);
+        FlowNetwork flowNetwork2 = new AdjListsFlowNetwork(3, 4);
         flowNetwork2.addEdge(0, 1, 4);
         flowNetwork2.addEdge(1, 2, 4);
         BacktrackingFlow flow1 = new BacktrackingFlow(flowNetwork2, 4, 4);
@@ -67,20 +67,20 @@ public class BacktrackingFlowTest {
     public void BactrackingFlowTest2() {
         //square
 
-        FlowNetworkInterface flowNetwork = new AdjListsFlowNetwork(4, 4, 0, 3);
+        FlowNetwork flowNetwork = new AdjListsFlowNetwork(4, 4);
         flowNetwork.addEdge(0, 1, 4);
         flowNetwork.addEdge(0, 2, 4);
         flowNetwork.addEdge(1, 3, 4);
         flowNetwork.addEdge(2, 3, 4);
         BacktrackingFlow flow = new BacktrackingFlow(flowNetwork, 6, 4);
 
-        flow.getNowhere0Flows(flowNetwork.source(), flows);
+        flow.getNowhere0Flows(0, flows);
         assertThat(flows.size(), is(3));
     }
 
     @Test
     public void BactrackingFlowTest3() {
-        FlowNetworkInterface flowNetwork2 = new AdjListsFlowNetwork(6, 4, 0, 5);
+        FlowNetwork flowNetwork2 = new AdjListsFlowNetwork(6, 4);
         flowNetwork2.addEdge(0, 1, 4);
         flowNetwork2.addEdge(0, 2, 4);
         flowNetwork2.addEdge(1, 3, 4);
@@ -94,7 +94,7 @@ public class BacktrackingFlowTest {
     }
     @Test
     public void impossibleFlowTest() {
-        FlowNetworkInterface flowNetwork = new AdjListsFlowNetwork(5, 4, 0, 4);
+        FlowNetwork flowNetwork = new AdjListsFlowNetwork(5, 4);
         flowNetwork.addEdge(0, 1, 4);
         flowNetwork.addEdge(0, 2, 4);
         flowNetwork.addEdge(0, 3, 4);
@@ -102,18 +102,18 @@ public class BacktrackingFlowTest {
         flowNetwork.addEdge(2, 4, 4);
         flowNetwork.addEdge(3, 4, 4);
         BacktrackingFlow flow = new BacktrackingFlow(flowNetwork, 2, 4);
-        flow.getNowhere0Flows(flowNetwork.source(), flows);
+        flow.getNowhere0Flows(0, flows);
         assertTrue(flows.isEmpty());
     }
     @Test
     public void minimalpossibleFlowTest() {
-        FlowNetworkInterface flowNetwork = new AdjListsFlowNetwork(4, 4, 0, 3);
+        FlowNetwork flowNetwork = new AdjListsFlowNetwork(4, 4);
         flowNetwork.addEdge(0, 1, 4);
         flowNetwork.addEdge(0, 2, 4);
         flowNetwork.addEdge(1, 3, 4);
         flowNetwork.addEdge(2, 3, 4);
         BacktrackingFlow flow = new BacktrackingFlow(flowNetwork, 3, 4);
-        flow.getNowhere0Flows(flowNetwork.source(), flows);
+        flow.getNowhere0Flows(0, flows);
         flows.forEach(System.out::println);
         assertFalse(flows.isEmpty());
     }
@@ -125,7 +125,7 @@ public class BacktrackingFlowTest {
         int numVertices = 9;
         int sink = numVertices - 1;
         int sourceFlowSum = numVertices - 1;
-        FlowNetworkInterface flowNetwork = new AdjListsFlowNetwork(numVertices, 4, 0, sink);
+        FlowNetwork flowNetwork = new AdjListsFlowNetwork(numVertices, 4);
 
             for (int to = 1; to <= numVertices - 2; to++) {
                 flowNetwork.addEdge(0, to, 4);
@@ -134,7 +134,7 @@ public class BacktrackingFlowTest {
 
         BacktrackingFlow flow = new BacktrackingFlow(flowNetwork, sourceFlowSum, 4);
 
-        flow.getNowhere0Flows(flowNetwork.source(), flows);
+        flow.getNowhere0Flows(0, flows);
         flows.forEach(System.out::println);
         assertEquals(flows.size(), factorial(sourceFlowSum - 1) /
                 ((long) factorial(numVertices - 3) * (factorial(sourceFlowSum - (numVertices - 2)))));
@@ -143,7 +143,7 @@ public class BacktrackingFlowTest {
     //Seymour's 6-flow theorem: Every bridgeless graph has a 6-flow.
     @Test
     public void guaranteedFlow() {
-        FlowNetworkInterface flowNetwork2 = new AdjListsFlowNetwork(6, 4, 0, 5);
+        FlowNetwork flowNetwork2 = new AdjListsFlowNetwork(6, 4);
         flowNetwork2.addEdge(0, 1, 4);
         flowNetwork2.addEdge(0, 2, 4);
         flowNetwork2.addEdge(1, 3, 4);
@@ -161,7 +161,7 @@ public class BacktrackingFlowTest {
     //Jaeger's 4-flow theorem: Every 4-edge-connected graph has a 4-flow.
     @Test
     public void guaranteedFlow2() {
-        FlowNetworkInterface flowNetwork2 = new AdjListsFlowNetwork(7, 3, 0, 6);
+        FlowNetwork flowNetwork2 = new AdjListsFlowNetwork(7, 3);
         int maxFlow = 3;
         //flowNetwork2 is the 4-edge-connected graph (critical graph with chromatic number = 5)
        flowNetwork2.addEdge(0, 1, maxFlow);
