@@ -58,7 +58,7 @@ public class OutgoingLabelingIterator implements Iterator<Map<Integer, Integer>>
     }
 
     private void setOutgoingEdgesLabeling() {
-        if (currentOption > MAX_OPTION) throw new UnsupportedOperationException();
+        if (currentOption > MAX_OPTION) System.out.println("currentOption > MAX_OPTION");
         Stack<Integer> labeling = labellingsString().chars().mapToObj(Character::getNumericValue)
                 .collect(Collectors.toCollection(Stack<Integer>::new));
 
@@ -78,23 +78,18 @@ public class OutgoingLabelingIterator implements Iterator<Map<Integer, Integer>>
     @Override
     public boolean hasNext() {
         if (inFlowSum < neighboursCount) return false;
-        try {
-            setOutgoingEdgesLabeling();
-        } catch (UnsupportedOperationException exception) {
-            return false;
-        }
-        //important! hasNext() may change outgoingEdgesLabeling
 
         while (currentOption < MAX_OPTION) {
+            setOutgoingEdgesLabeling();
+
             if (constrained() && vertexPreservesFlow() && nowhere0()) {
                 return true;
             } else {
                 currentOption++;
-                setOutgoingEdgesLabeling();
             }
         }
 
-        return (constrained() && vertexPreservesFlow() && nowhere0());
+        return false;
     }
 
 

@@ -1,4 +1,4 @@
 package graphs;
 
-public interface UndirectedGraph extends Graph {
+public interface UndirectedGraph extends GraphInterface {
 }

@@ -13,23 +13,25 @@ import java.util.*;
 
 
 public class BacktrackingFlow {
-    private final int MAX_FLOW_VALUE;
+  /*  private final int MAX_FLOW_VALUE;
     //represents flow, maps neighbours of vertex to the values of flow pointing to neighbours
     private final List<Map<Integer, Integer>> flow = new ArrayList<>();
-    private final FlowNetwork flowNetwork;
+    private final FlowNetworkInterface flowNetworkInterface;
+    private int traversedVerticesCount;
+    List<Boolean> traversedVertices;
 
-    public BacktrackingFlow(FlowNetwork flowNetwork, int sourceFlowSum, int MAX_FLOW_VALUE) {
-        for (int i = 0; i < flowNetwork.getNumberOfVertices(); i++) {
+    public BacktrackingFlow(FlowNetworkInterface flowNetworkInterface, int MAX_FLOW_VALUE) {
+        for (int i = 0; i < flowNetworkInterface.getNumberOfVertices(); i++) {
             flow.add(new HashMap<>());
         }
-        this.flowNetwork = flowNetwork;
-        initializeFlow();
+        this.flowNetworkInterface = flowNetworkInterface;
+        this.traversedVertices = new ArrayList<>();
         this.MAX_FLOW_VALUE = MAX_FLOW_VALUE;
     }
 
     public boolean isNowhere0(List<Map<Integer, Integer>> flow) {
-        for (Map<Integer, Integer> edgeFlow:
-             flow) {
+        for (Map<Integer, Integer> edgeFlow :
+                flow) {
             if (edgeFlow.containsValue(0)) return false;
         }
         return true;
@@ -41,29 +43,29 @@ public class BacktrackingFlow {
 
 
     public void initializeFlow() {
-        for (int from = 0; from < flowNetwork.getNumberOfVertices(); from++) {
+        for (int from = 0; from < flowNetworkInterface.getNumberOfVertices(); from++) {
 
             Map<Integer, Integer> outgoingFlow = new HashMap<>();
             for (Integer to :
-                    flowNetwork.adjVertices(from)) {
-                outgoingFlow.put(to, 0);
+                    flowNetworkInterface.adjVertices(from)) {
+                outgoingFlow.put(to, 1);
             }
             flow.set(from, outgoingFlow);
         }
     }
 
-    /**
+    *//**
      * sum of flows of edges pointing into vertex to
-     */
+     *//*
 
     public int flowSumInVertex(int to) {
         int flowSum = 0;
-            for (Map<Integer, Integer> edgeFlow :
-                    flow) {
-                if (edgeFlow.containsKey(to)) {
-                    flowSum += edgeFlow.get(to);
-                }
+        for (Map<Integer, Integer> edgeFlow :
+                flow) {
+            if (edgeFlow.containsKey(to)) {
+                flowSum += edgeFlow.get(to);
             }
+        }
         return flowSum;
     }
 
@@ -72,8 +74,8 @@ public class BacktrackingFlow {
         try {
             for (Integer to :
                     outgoingEdgesLabeling.keySet()) {
-                if (flowNetwork.existsEdge(from, to)) {
-                    if (outgoingEdgesLabeling.get(to) <= flowNetwork.getCapacity(from, to)) {
+                if (flowNetworkInterface.existsEdge(from, to)) {
+                    if (outgoingEdgesLabeling.get(to) <= flowNetworkInterface.getCapacity(from, to)) {
                         int flowValue = outgoingEdgesLabeling.get(to);
                         flow.get(from).put(to, flowValue);
                     } else {
@@ -91,48 +93,75 @@ public class BacktrackingFlow {
     }
 
 
-    /**
+    *//**
      * @param from - vertex, from which we continue to compute required network flow
-     */
+     *//*
     public void getNowhere0Flows(int from, List<List<Map<Integer, Integer>>> flowList) {
-        int inFlowSum = flowSumInVertex(from);
 
+            for (int flowSum = 1; flowSum <= 4; flowSum++) {
+                int inFlowSum = (traversedVerticesCount > 0) ? flowSumInVertex(from) : flowSum;
+                if (traversedVerticesCount == this.flowNetworkInterface.getNumberOfVertices()) {
+                    flowList.add(List.copyOf(flow));
+                    initializeFlow();
+                    traversedVerticesCount = 0;
+                } else {
+                    Map<Integer, Integer> capacityConstraints = getCapacityConstraints(from);
+
+                    OutgoingLabelingIterator iterator = new OutgoingLabelingIterator(4, inFlowSum, capacityConstraints);
+                    while (iterator.hasNext()) {
+                        setVertexFlow(from, iterator.next());
+                        for (Integer to : flowNetworkInterface.adjVertices(from)) {
+                            traversedVerticesCount++;
+                            getNowhere0Flows(to, flowList);
+                        }
+                    }
+                }
+        }
     }
 
-    /**
+    private boolean isVertexVisited(int vertex) {
+        return  !flow.get(vertex).isEmpty();
+    }
+
+
+    *//**
      * Computes and returns the capacity constraints map for the given vertex.
-     */
+     *//*
     private Map<Integer, Integer> getCapacityConstraints(int vertex) {
         Map<Integer, Integer> capacityConstraints = new HashMap<>();
-        for (int to : flowNetwork.adjVertices(vertex)) {
-            capacityConstraints.put(to, flowNetwork.getCapacity(vertex, to));
+        for (int to : flowNetworkInterface.adjVertices(vertex)) {
+            capacityConstraints.put(to, flowNetworkInterface.getCapacity(vertex, to));
         }
         return capacityConstraints;
     }
 
-    /**
+    *//**
      * Generates and returns a sequence of possible flow values for the given vertex based on the given capacity constraints and in-flow sum.
-     */
+     *//*
     private Iterator<Map<Integer, Integer>> generateFlowValues(int inFlowSum, Map<Integer, Integer> capacityConstraints) {
         return new OutgoingLabelingIterator(MAX_FLOW_VALUE, inFlowSum, capacityConstraints);
     }
 
-    /**
+    *//**
      * Sets the flow value for the given vertex in the flow network.
-     */
+     *//*
     private void setVertexFlow(int vertex, int flowValue) {
         flow.get(vertex).replaceAll((to, flow) -> flowValue);
     }
 
+    public int getMaxFlowValue() {
+        return this.MAX_FLOW_VALUE;
+    }
+
 
     public void printFlow() {
-        for (int from = 0; from < flowNetwork.getNumberOfVertices(); from++) {
+        for (int from = 0; from < flowNetworkInterface.getNumberOfVertices(); from++) {
             System.out.println("---" + from + "---");
             for (Integer to :
-                    flowNetwork.adjVertices(from)) {
+                    flowNetworkInterface.adjVertices(from)) {
                 System.out.println(from + " -> " + to + " : " + getEdgeFlow(from, to));
             }
         }
-    }
+    }*/
 
 }
