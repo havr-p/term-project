@@ -1,5 +1,6 @@
 package graphs;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -49,11 +50,17 @@ public class BruteForceFlowTest {
         flowNetworkInterface.addEdge(0, 1, 4);
        // BruteForceFlow flow = new BruteForceFlow(flowNetworkInterface,  4);
         BruteForceFlow flow = new BruteForceFlow(flowNetworkInterface, 4);
-        flow.findNowhere0Flows(0, flows);
+        flow.findNowhere0Flows(flowNetworkInterface.getEdges(),0, flows);
         System.out.println(flows.size());
         assertEquals(flow.getMaxFlowValue(), flows.size());
-        assertTrue(List.of(Map.of(1, 1), Map.of()).containsAll(flows.get(0)));
-        assertEquals(2, flows.get(0).size());
+        for (int i = 1; i <= 4; i++) {
+            List<Map<Integer, Integer>> expectedFlow = List.of(Map.of(1, i), Map.of());
+            System.out.println(expectedFlow);
+            System.out.println("got " + flows.get(i - 1).toString());
+
+            assertEquals(flows.get(i - 1).size(), expectedFlow.size());
+            assertThat(flows.get(i - 1), CoreMatchers.equalTo(expectedFlow));
+        }
     }
     @Test
     public void BactrackingFlowTest1() {
@@ -61,7 +68,7 @@ public class BruteForceFlowTest {
         flowNetworkInterface2.addEdge(0, 1, 4);
         flowNetworkInterface2.addEdge(1, 2, 4);
         BruteForceFlow flow1 = new BruteForceFlow(flowNetworkInterface2,  4);
-        flow1.findNowhere0Flows(0, flows);
+        flow1.findNowhere0Flows(flowNetworkInterface2.getEdges(),0, flows);
         assertThat(flows.size(), is(4));
         System.out.println(flows.get(0));
     }
@@ -77,8 +84,8 @@ public class BruteForceFlowTest {
         flowNetworkInterface.addEdge(2, 3, 4);
         BruteForceFlow flow = new BruteForceFlow(flowNetworkInterface,  4);
 
-        flow.findNowhere0Flows(0, flows);
-        assertThat(flows.size(), is(3));
+        flow.findNowhere0Flows(flowNetworkInterface.getEdges(),0, flows);
+        assertThat(flows.size(), is(16));
     }
 
     @Test
@@ -91,21 +98,15 @@ public class BruteForceFlowTest {
         flowNetworkInterface2.addEdge(3, 5, 4);
         flowNetworkInterface2.addEdge(4, 5, 4);
         BruteForceFlow flow1 = new BruteForceFlow(flowNetworkInterface2,  4);
-        flow1.findNowhere0Flows(0, flows);
+        flow1.findNowhere0Flows(flowNetworkInterface2.getEdges(), 0, flows);
         flows.forEach(System.out::println);
-        assertThat(flows.size(), is(3));
+        assertThat(flows.size(), is(16));
     }
     @Test
-    public void impossibleFlowTest() {
+    public void emptyFlowTest() {
         FlowNetworkInterface flowNetworkInterface = new FlowNetwork(5, 4);
-        flowNetworkInterface.addEdge(0, 1, 4);
-        flowNetworkInterface.addEdge(0, 2, 4);
-        flowNetworkInterface.addEdge(0, 3, 4);
-        flowNetworkInterface.addEdge(1, 4, 4);
-        flowNetworkInterface.addEdge(2, 4, 4);
-        flowNetworkInterface.addEdge(3, 4, 4);
         BruteForceFlow flow = new BruteForceFlow(flowNetworkInterface,  4);
-        flow.findNowhere0Flows(0, flows);
+        flow.findNowhere0Flows(flowNetworkInterface.getEdges(), 0, flows);
         assertTrue(flows.isEmpty());
     }
     @Test
@@ -116,7 +117,7 @@ public class BruteForceFlowTest {
         flowNetworkInterface.addEdge(1, 3, 4);
         flowNetworkInterface.addEdge(2, 3, 4);
         BruteForceFlow flow = new BruteForceFlow(flowNetworkInterface,  4);
-        flow.findNowhere0Flows(0, flows);
+        flow.findNowhere0Flows(flowNetworkInterface.getEdges(),0, flows);
         flows.forEach(System.out::println);
         assertFalse(flows.isEmpty());
     }
@@ -137,7 +138,7 @@ public class BruteForceFlowTest {
 
         BruteForceFlow flow = new BruteForceFlow(flowNetworkInterface, 4);
 
-        flow.findNowhere0Flows(0, flows);
+        flow.findNowhere0Flows(flowNetworkInterface.getEdges(),0, flows);
         flows.forEach(System.out::println);
         assertEquals(flows.size(), factorial(sourceFlowSum - 1) /
                 ((long) factorial(numVertices - 3) * (factorial(sourceFlowSum - (numVertices - 2)))));
@@ -156,7 +157,7 @@ public class BruteForceFlowTest {
         flowNetworkInterface2.addEdge(1, 2, 4);
         flowNetworkInterface2.addEdge(3, 4, 4);
         BruteForceFlow flow1 = new BruteForceFlow(flowNetworkInterface2,  5);
-        flow1.findNowhere0Flows(0, flows);
+        flow1.findNowhere0Flows(flowNetworkInterface2.getEdges(),0, flows);
         flows.forEach(System.out::println);
         assertFalse(flows.isEmpty());
     }
@@ -185,7 +186,7 @@ public class BruteForceFlowTest {
        flowNetworkInterface2.addEdge(5, 6, maxFlow);
 
         BruteForceFlow flow1 = new BruteForceFlow(flowNetworkInterface2,  maxFlow);
-        flow1.findNowhere0Flows(0, flows);
+        flow1.findNowhere0Flows(flowNetworkInterface2.getEdges(),0, flows);
         flows.forEach(System.out::println);
         assertFalse(flows.isEmpty());
     }

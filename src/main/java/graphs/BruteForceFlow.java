@@ -7,15 +7,13 @@ public class BruteForceFlow {
     //represents flow, maps neighbours of vertex to the values of flow pointing to neighbours
     private final List<Map<Integer, Integer>> flow = new ArrayList<>();
     private final FlowNetworkInterface flowNetworkInterface;
-    private int traversedVerticesCount;
-    List<Boolean> traversedVertices;
+
 
     public BruteForceFlow(FlowNetworkInterface flowNetworkInterface, int MAX_FLOW_VALUE) {
         for (int i = 0; i < flowNetworkInterface.getNumberOfVertices(); i++) {
             flow.add(new HashMap<>());
         }
         this.flowNetworkInterface = flowNetworkInterface;
-        this.traversedVertices = new ArrayList<>();
         this.MAX_FLOW_VALUE = MAX_FLOW_VALUE;
         initializeFlow();
     }
@@ -32,7 +30,9 @@ public class BruteForceFlow {
         return flow.get(edge.from()).get(edge.to());
     }
     public void setEdgeFlow(Edge edge, int value) {
+        //System.out.println("was " + flow);
         flow.get(edge.from()).replace(edge.to(), value);
+        //System.out.println("now " + flow);
     }
 
 
@@ -46,6 +46,13 @@ public class BruteForceFlow {
             }
             flow.set(from, outgoingFlow);
         }
+    }
+    private List<Map<Integer, Integer>> deepCopyFlow(List<Map<Integer, Integer>> original) {
+        List<Map<Integer, Integer>> copy = new ArrayList<>(original.size());
+        for (Map<Integer, Integer> map : original) {
+            copy.add(new HashMap<>(map));
+        }
+        return copy;
     }
 
     /**
@@ -129,21 +136,21 @@ public class BruteForceFlow {
      * @param edgeIndex - vertex, from which we continue to compute required network flow
      */
 
-    public void findNowhere0Flows(int edgeIndex, List<List<Map<Integer, Integer>>> flows) {
-        if (edgeIndex == this.flowNetworkInterface.getEdges().size()) {
-            List<Map<Integer, Integer>> newFlow = new ArrayList<>(flow);
+    public void findNowhere0Flows(List<Edge> edges, int edgeIndex, List<List<Map<Integer, Integer>>> flows) {
+        if (edgeIndex == this.flowNetworkInterface.getNumberOfEdges()) {
             //flows.add(Collections.unmodifiableList(newFlow));
-            if (preservesFlow() && constrained() && nowhere0()) {
+            if (preservesFlow() && nowhere0()) {
                 System.out.println("flow is valid");
-                System.out.println(newFlow);
-                flows.add(Collections.unmodifiableList(newFlow));
+                System.out.println(flow);
+                flows.add(Collections.unmodifiableList(deepCopyFlow(flow)));
+                System.out.println(flows);
             }
             return;
         }
 
         for (int flowValue = 1; flowValue <= MAX_FLOW_VALUE; flowValue++) {
-           setEdgeFlow(this.flowNetworkInterface.getEdges().get(edgeIndex), flowValue);
-            findNowhere0Flows( edgeIndex + 1, flows);
+           setEdgeFlow(edges.get(edgeIndex), flowValue);
+            findNowhere0Flows(edges, edgeIndex + 1, flows);
         }
     }
 

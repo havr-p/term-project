@@ -12,7 +12,7 @@ interface GraphInterface {
 
     /* Prida hranu z vrcholu from do vrcholu to
        a vrati true, ak sa ju podarilo pridat: */
-    boolean addEdge(int from, int to);
+    void addEdge(int from, int to);
 
     /* Vrati true, ak existuje hrana z vrcholu from do vrcholu to: */
     boolean existsEdge(int from, int to);
@@ -21,7 +21,7 @@ interface GraphInterface {
        do ktorych vedie hrana z vrcholu vertex. Pre neorientovane grafy ide
        o prave vsetkych susedov vrcholu vertex: */
     List<Integer> adjVertices(int vertex);
-    List<Edge> getEdges();
     List<Edge> getAdjacentEdges(int from);
     List<Edge> getIncomingEdges(int to);
+    List<Edge> getEdges();
 }

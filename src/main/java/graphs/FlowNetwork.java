@@ -20,21 +20,20 @@ public class FlowNetwork extends Graph implements FlowNetworkInterface {
             System.out.println("This edge already exists");
             return false;
         }
-        this.edges.add(new Edge(from, to, capacity));
+        this.addEdge(from, to);
         return true;
     }
 
 
     public int getCapacity(int from, int to) {
+        int capacity = -1;
         for (Edge e :
                 getEdges()) {
             if (e.from() == from && e.to() == to) {
-                return e.capacity();
-            } else {
-                throw new IllegalArgumentException("edge does not exist");
+                capacity = e.capacity();
             }
         }
-        return -1;
+        return capacity;
     }
 
     @Override
