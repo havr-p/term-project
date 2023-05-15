@@ -47,11 +47,11 @@ public class PathDecompositionFlow {
         }
 
 
-        FlowNetwork flowNetwork = new FlowNetwork(4, 4);
-        flowNetwork.addEdge(0, 1, 4);
-        flowNetwork.addEdge(1, 2, 4);
-        flowNetwork.addEdge(1, 3, 4);
-        flowNetwork.addEdge(0, 2, 4);
+        Graph flowNetwork = new Graph(4);
+        flowNetwork.addEdge(0, 1);
+        flowNetwork.addEdge(1, 2);
+        flowNetwork.addEdge(1, 3);
+        flowNetwork.addEdge(0, 2);
         flowNetwork.addEdge(2,3);
         PathDecompositionFlow pathDecompositionFlow = new PathDecompositionFlow(flowNetwork);
 

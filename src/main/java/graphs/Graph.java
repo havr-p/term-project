@@ -6,6 +6,7 @@ import java.util.List;
 //todo return to double list of vertices
 public class Graph implements DirectedGraph {
     List<List<Integer>> edges;
+    List<Edge> indexedEdges;
     int numOfVertices;
 
 
@@ -17,6 +18,11 @@ public class Graph implements DirectedGraph {
         for (int i = 0; i < numOfVertices; i++) {
             edges.add(new ArrayList<>());
         }
+        this.
+    }
+    //for tests
+    public Graph(int[][] edges) {
+
     }
 
     @Override
@@ -79,6 +85,18 @@ public class Graph implements DirectedGraph {
             result.addAll(getAdjacentEdges(from));
         }
         return result;
+    }
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        for (int from = 0; from < getNumberOfVertices(); from++) {
+            s.append("Edges from ").append(from).append(":\n");
+            for (Integer to :
+                    adjVertices(from)) {
+                s.append("    ").append(from).append("> ").append(to).append('\n');
+            }
+        }
+        return s.toString();
     }
 }
 

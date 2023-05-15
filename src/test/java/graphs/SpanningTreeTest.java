@@ -34,7 +34,7 @@ public class SpanningTreeTest {
     @Test
     public void simpleSpanningTreeTest() {
         int numVertices = 4;
-        FlowNetwork graph = new FlowNetwork(numVertices,4);
+        Graph graph = new Graph(numVertices);
             graph.addEdge(0,1);
             graph.addEdge(1,2);
             graph.addEdge(1,3);
