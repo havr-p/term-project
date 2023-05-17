@@ -1,12 +1,14 @@
 package graphs;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+
 //todo return to double list of vertices
 public class Graph implements DirectedGraph {
-    List<List<Integer>> edges;
-    List<Edge> indexedEdges;
+    List<List<Edge>> edges;
     int numOfVertices;
 
 
@@ -18,7 +20,6 @@ public class Graph implements DirectedGraph {
         for (int i = 0; i < numOfVertices; i++) {
             edges.add(new ArrayList<>());
         }
-        this.
     }
     //for tests
     public Graph(int[][] edges) {
@@ -46,46 +47,35 @@ public class Graph implements DirectedGraph {
 
     @Override
     public void addEdge(int from, int to) {
-      edges.get(from).add(to);
+      edges.get(from).add(new Edge(from, to));
     }
 
     @Override
     public boolean existsEdge(int from, int to) {
-       return edges.get(from).contains(to);
+            return edges.get(from).contains(new Edge(from, to));
         }
 
     @Override
     public List<Integer> adjVertices(int from) {
-        return Collections.unmodifiableList(edges.get(from));
+        return Collections.unmodifiableList(edges.get(from).stream().map(Edge::to).distinct().toList());
     }
     @Override
     public List<Edge> getAdjacentEdges(int from) {
-        List<Edge> result = new ArrayList<>();
-        for (Integer to:
-             edges.get(from)) {
-            result.add(new Edge(from ,to));
-        }
-        return result;
+        return Collections.unmodifiableList(edges.get(from));
     }
     @Override
     public List<Edge> getIncomingEdges(int to) {
         List<Edge> result = new ArrayList<>();
         for (int from = 0; from < edges.size(); from++) {
-            for (Integer v:
-                 edges.get(from)) {
-                if (v == to) result.add(new Edge(from, to));
-            }
+                 result.addAll(edges.get(from).stream().filter(edge -> to == edge.to()).toList());
         }
         return result;
     }
     @Override
-    public List<Edge> getEdges() {
-        List<Edge> result = new ArrayList<>();
-        for (int from = 0; from < numOfVertices; from++) {
-            result.addAll(getAdjacentEdges(from));
-        }
-        return result;
+    public List<Edge> getEdgeList() {
+        return edges.stream().flatMap(Collection::stream).toList();
     }
+
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
@@ -97,6 +87,16 @@ public class Graph implements DirectedGraph {
             }
         }
         return s.toString();
+    }
+
+    public List<List<Integer>> adjacentLists() {
+        List<List<Integer>> adjacentLists = new ArrayList<>();
+        for (int from = 0; from < edges.size(); from++) {
+            adjacentLists.add(Collections.unmodifiableList(edges.get(from).stream().
+                    map(Edge::to)
+                    .toList()));
+        }
+        return adjacentLists;
     }
 }
 

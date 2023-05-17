@@ -23,5 +23,5 @@ interface GraphInterface {
     List<Integer> adjVertices(int vertex);
     List<Edge> getAdjacentEdges(int from);
     List<Edge> getIncomingEdges(int to);
-    List<Edge> getEdges();
+    List<Edge> getEdgeList();
 }
