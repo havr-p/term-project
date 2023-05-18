@@ -6,14 +6,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//todo return to double list of vertices
 public class Graph implements DirectedGraph {
     List<List<Edge>> edges;
     int numOfVertices;
 
 
-    /* Konstruktor, ktory ako parameter dostane prirodzene cislo numVertices
-       a vytvori graf o numVertices vrcholoch a bez jedinej hrany: */
     public Graph(int numOfVertices) {
         this.numOfVertices = numOfVertices;
         this.edges = new ArrayList<>();

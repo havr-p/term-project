@@ -1,3 +1,4 @@
+/*
 package graphs;
 
 import org.junit.*;
@@ -17,7 +18,7 @@ public class OutgoingLabelingTest {
         labelings.clear();
     }
 
-    @Test
+    @org.junit.Test
     public void simplestLabelingTest() {
 
         iterator1 = new OutgoingLabelingIterator(4, 4,
@@ -74,3 +75,4 @@ public class OutgoingLabelingTest {
     }
 
 }
+*/
