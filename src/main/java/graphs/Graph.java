@@ -20,7 +20,17 @@ public class Graph implements DirectedGraph {
     }
     //for tests
     public Graph(int[][] edges) {
-
+        this.numOfVertices = edges.length;
+        this.edges = new ArrayList<>();
+        for (int i = 0; i < numOfVertices; i++) {
+            this.edges.add(new ArrayList<>());
+        }
+        for (int i = 0; i < edges.length; i++) {
+            for (int j = 0; j < edges[i].length; j++) {
+                int w = edges[i][j];
+                addEdge(i, edges[i][j]);
+            }
+        }
     }
 
     @Override
