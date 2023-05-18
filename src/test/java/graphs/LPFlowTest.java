@@ -140,9 +140,6 @@ public class LPFlowTest {
         NowhereZeroFlow flow1 = new LPFlow(graph,  5);
         flow1.findNowhere0Flows(flows);
         flows.forEach(System.out::println);
-        int[][] e = {
-                {1,1}, {0, 0}
-        };
         assertFalse(flows.isEmpty());
     }
 
@@ -176,6 +173,14 @@ public class LPFlowTest {
     }
     @Test
     public void simpleMultigraph() {
+        int[][] a ={{1,1}, {0, 0}};
+        Graph graph = new Graph(a);
+        NowhereZeroFlow flow1 = new LPFlow(graph,  4);
+        flow1.findNowhere0Flows(flows);
+        assertEquals(flows.size(), 1);
+    }
+    @Test
+    public void simpleMultigraph2() {
         Graph graph = new Graph(2);
         graph.addEdge(0, 1);
         graph.addEdge(0, 1);
@@ -183,7 +188,7 @@ public class LPFlowTest {
         graph.addEdge(1, 0);
         graph.addEdge(1, 0);
         graph.addEdge(1, 0);
-        NowhereZeroFlow flow1 = new LPFlow(graph,  1);
+        NowhereZeroFlow flow1 = new LPFlow(graph,  4);
         flow1.findNowhere0Flows(flows);
         assertEquals(flows.size(), 1);
     }
