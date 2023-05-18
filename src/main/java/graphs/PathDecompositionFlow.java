@@ -1,11 +1,33 @@
 package graphs;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class PathDecompositionFlow {
     Graph graph;
+
+    PathDecompositionFlow(Graph graph) {
+        this.graph = graph;
+    }
+
+    public static void main(String[] args) {
+        List<List<Integer>> graph = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            graph.add(new ArrayList<>());
+        }
+
+
+        Graph flowNetwork = new Graph(4);
+        flowNetwork.addEdge(0, 1);
+        flowNetwork.addEdge(1, 2);
+        flowNetwork.addEdge(1, 3);
+        flowNetwork.addEdge(0, 2);
+        flowNetwork.addEdge(2, 3);
+        PathDecompositionFlow pathDecompositionFlow = new PathDecompositionFlow(flowNetwork);
+
+        System.out.println(pathDecompositionFlow.getSpanningTree());
+    }
+
     void DFSUtil(int v, boolean[] visited, List<List<Integer>> tree, int parent) {
         visited[v] = true;
 
@@ -34,28 +56,6 @@ public class PathDecompositionFlow {
 
     List<List<Integer>> getSpanningTree() {
         return DFS(0);
-    }
-    PathDecompositionFlow(Graph graph) {
-        this.graph = graph;
-    }
-
-
-    public static void main(String[] args) {
-        List<List<Integer>> graph = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            graph.add(new ArrayList<>());
-        }
-
-
-        Graph flowNetwork = new Graph(4);
-        flowNetwork.addEdge(0, 1);
-        flowNetwork.addEdge(1, 2);
-        flowNetwork.addEdge(1, 3);
-        flowNetwork.addEdge(0, 2);
-        flowNetwork.addEdge(2,3);
-        PathDecompositionFlow pathDecompositionFlow = new PathDecompositionFlow(flowNetwork);
-
-        System.out.println(pathDecompositionFlow.getSpanningTree());
     }
 
 }

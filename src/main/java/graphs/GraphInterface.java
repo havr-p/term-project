@@ -6,6 +6,7 @@ import java.util.List;
    prirodzene cislo n: */
 interface GraphInterface {
     int getNumberOfVertices(); // Vrati pocet vrcholov grafu.
+
     int getNumberOfOutgoingEdges(int from);
 
     int getNumberOfEdges();    // Vrati pocet hran grafu.
@@ -21,7 +22,10 @@ interface GraphInterface {
        do ktorych vedie hrana z vrcholu vertex. Pre neorientovane grafy ide
        o prave vsetkych susedov vrcholu vertex: */
     List<Integer> adjVertices(int vertex);
+
     List<Edge> getAdjacentEdges(int from);
+
     List<Edge> getIncomingEdges(int to);
+
     List<Edge> getEdgeList();
 }

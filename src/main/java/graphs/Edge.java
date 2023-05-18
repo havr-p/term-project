@@ -1,10 +1,10 @@
 package graphs;
 
 
-
 public class Edge implements Comparable<Edge> {
     private final int from;
     private final int to;
+
     public Edge(int from, int to) {
         if (from < 0) throw new IllegalArgumentException("vertex index must be a non-negative integer");
         if (to < 0) throw new IllegalArgumentException("vertex index must be a non-negative integer");
@@ -13,15 +13,13 @@ public class Edge implements Comparable<Edge> {
     }
 
 
-
-
     public int from() {
         return from;
     }
 
 
     public int to() {
-       return to;
+        return to;
     }
 
     @Override

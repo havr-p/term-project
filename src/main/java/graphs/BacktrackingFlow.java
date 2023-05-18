@@ -1,9 +1,10 @@
 package graphs;
 
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 
-public class BacktrackingFlow extends NowhereZeroFlow{
+public class BacktrackingFlow extends NowhereZeroFlow {
 
 
     public BacktrackingFlow(Graph graph, int MAX_FLOW_VALUE) {
@@ -15,6 +16,7 @@ public class BacktrackingFlow extends NowhereZeroFlow{
     public void findNowhere0Flows(List<List<Pair<Edge, Integer>>> flows) {
         findNowhere0FlowsHelper(0, flows);
     }
+
     /**
      * @param edgeIndex - vertex, from which we continue to compute required network flow
      */
@@ -35,8 +37,6 @@ public class BacktrackingFlow extends NowhereZeroFlow{
             findNowhere0FlowsHelper(edgeIndex + 1, flows);
         }
     }
-
-
 
 
 }
