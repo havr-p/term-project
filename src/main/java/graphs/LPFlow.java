@@ -16,9 +16,9 @@ public class LPFlow extends NowhereZeroFlow {
     Model model = new Model("nowhere-zero 5-flow");
     List<List<List<IntVar>>> edgeVariables = new ArrayList<>();
 
-    protected LPFlow(Graph graph, int MAX_FLOW_VALUE) {
-        super(graph, MAX_FLOW_VALUE);
-        this.V = graph.numOfVertices;
+    protected LPFlow(DirectedGraph directedGraph, int MAX_FLOW_VALUE) {
+        super(directedGraph, MAX_FLOW_VALUE);
+        this.V = directedGraph.numOfVertices;
         //System.out.println(V);
         for (int i = 0; i < V; i++) {
             edgeVariables.add(new ArrayList<>());
@@ -30,18 +30,18 @@ public class LPFlow extends NowhereZeroFlow {
     }
 
     public static void main(String[] args) {
-        Graph graph = new Graph(2);
-        graph.addEdge(0, 1);
-        graph.addEdge(0, 2);
-        graph.addEdge(1, 3);
-        graph.addEdge(2, 3);
-        NowhereZeroFlow flow = new LPFlow(graph, 4);
+        DirectedGraph directedGraph = new DirectedGraph(2);
+        directedGraph.addEdge(0, 1);
+        directedGraph.addEdge(0, 2);
+        directedGraph.addEdge(1, 3);
+        directedGraph.addEdge(2, 3);
+        NowhereZeroFlow flow = new LPFlow(directedGraph, 4);
         List<List<Pair<Edge, Integer>>> flows = new ArrayList<>();
-        flow.findNowhere0Flows(flows);
+        flow.findNowhere0FlowsInDirected(flows);
     }
 
-    private void setVariables() {
-        List<List<Integer>> edges = graph.adjacentLists();
+    private void setVariablesDirected() {
+        List<List<Integer>> edges = directedGraph.adjacentLists();
         List<Map<Integer, Integer>> multi = new ArrayList<>();
         for (int i = 0; i < V; i++) {
             multi.add(new HashMap<>());
@@ -81,8 +81,8 @@ public class LPFlow extends NowhereZeroFlow {
     }
 
     @Override
-    public void findNowhere0Flows(List<List<Pair<Edge, Integer>>> flows) {
-        setVariables();
+    public void findNowhere0FlowsInDirected(List<List<Pair<Edge, Integer>>> flows) {
+        setVariablesDirected();
         addFlowConstraints();
         //prepared to solve
         Solver solver = model.getSolver();
@@ -105,6 +105,11 @@ public class LPFlow extends NowhereZeroFlow {
             System.out.println("__________________END__________________");*/
             // do something, e.g. print out variable values
         }
+    }
+
+    @Override
+    public void findNowhere0FlowsInUndirected(List<List<Pair<Edge, Integer>>> flows) {
+
     }
 
 }

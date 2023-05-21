@@ -45,11 +45,11 @@ public class BacktrackingFlowTest {
 
     @Test
     public void simplestBactrackingFlowTest() {
-        Graph graph = new Graph(2);
-        graph.addEdge(0, 1);
+        DirectedGraph directedGraph = new DirectedGraph(2);
+        directedGraph.addEdge(0, 1);
         // NowhereZeroFlow flow = new BruteForceFlow(graph,  4);
-        NowhereZeroFlow flow = new BacktrackingFlow(graph, 4);
-        flow.findNowhere0Flows(flows);
+        NowhereZeroFlow flow = new BacktrackingFlow(directedGraph, 4);
+        flow.findNowhere0FlowsInDirected(flows);
         System.out.println(flows.size());
         assertEquals(flow.getMaxFlowValue(), flows.size());
         int flowIndex = 0;
@@ -63,11 +63,11 @@ public class BacktrackingFlowTest {
 
     @Test
     public void BactrackingFlowTest1() {
-        Graph graph = new Graph(3);
-        graph.addEdge(0, 1);
-        graph.addEdge(1, 2);
-        NowhereZeroFlow flow1 = new BacktrackingFlow(graph, 4);
-        flow1.findNowhere0Flows(flows);
+        DirectedGraph directedGraph = new DirectedGraph(3);
+        directedGraph.addEdge(0, 1);
+        directedGraph.addEdge(1, 2);
+        NowhereZeroFlow flow1 = new BacktrackingFlow(directedGraph, 4);
+        flow1.findNowhere0FlowsInDirected(flows);
         for (int i = 1; i < 5; i++) {
             List<Pair<Edge, Integer>> expectedFlow = List.of(new Pair<>(new Edge(0, 1), i),
                     new Pair<>(new Edge(1, 2), i));
@@ -83,49 +83,49 @@ public class BacktrackingFlowTest {
     public void BactrackingFlowTest2() {
         //square
 
-        Graph graph = new Graph(4);
-        graph.addEdge(0, 1);
-        graph.addEdge(0, 2);
-        graph.addEdge(1, 3);
-        graph.addEdge(2, 3);
-        NowhereZeroFlow flow = new BacktrackingFlow(graph, 4);
+        DirectedGraph directedGraph = new DirectedGraph(4);
+        directedGraph.addEdge(0, 1);
+        directedGraph.addEdge(0, 2);
+        directedGraph.addEdge(1, 3);
+        directedGraph.addEdge(2, 3);
+        NowhereZeroFlow flow = new BacktrackingFlow(directedGraph, 4);
 
-        flow.findNowhere0Flows(flows);
+        flow.findNowhere0FlowsInDirected(flows);
         assertThat(flows.size(), is(16));
     }
 
     @Test
     public void BactrackingFlowTest3() {
-        Graph graph = new Graph(6);
-        graph.addEdge(0, 1);
-        graph.addEdge(0, 2);
-        graph.addEdge(1, 3);
-        graph.addEdge(2, 4);
-        graph.addEdge(3, 5);
-        graph.addEdge(4, 5);
-        NowhereZeroFlow flow1 = new BacktrackingFlow(graph, 4);
-        flow1.findNowhere0Flows(flows);
+        DirectedGraph directedGraph = new DirectedGraph(6);
+        directedGraph.addEdge(0, 1);
+        directedGraph.addEdge(0, 2);
+        directedGraph.addEdge(1, 3);
+        directedGraph.addEdge(2, 4);
+        directedGraph.addEdge(3, 5);
+        directedGraph.addEdge(4, 5);
+        NowhereZeroFlow flow1 = new BacktrackingFlow(directedGraph, 4);
+        flow1.findNowhere0FlowsInDirected(flows);
         flows.forEach(System.out::println);
         assertThat(flows.size(), is(16));
     }
 
     @Test
     public void emptyFlowTest() {
-        Graph graph = new Graph(5);
-        NowhereZeroFlow flow = new BacktrackingFlow(graph, 4);
-        flow.findNowhere0Flows(flows);
+        DirectedGraph directedGraph = new DirectedGraph(5);
+        NowhereZeroFlow flow = new BacktrackingFlow(directedGraph, 4);
+        flow.findNowhere0FlowsInDirected(flows);
         assertTrue(flows.isEmpty());
     }
 
     @Test
     public void minimalpossibleFlowTest() {
-        Graph graph = new Graph(4);
-        graph.addEdge(0, 1);
-        graph.addEdge(0, 2);
-        graph.addEdge(1, 3);
-        graph.addEdge(2, 3);
-        NowhereZeroFlow flow = new BacktrackingFlow(graph, 4);
-        flow.findNowhere0Flows(flows);
+        DirectedGraph directedGraph = new DirectedGraph(4);
+        directedGraph.addEdge(0, 1);
+        directedGraph.addEdge(0, 2);
+        directedGraph.addEdge(1, 3);
+        directedGraph.addEdge(2, 3);
+        NowhereZeroFlow flow = new BacktrackingFlow(directedGraph, 4);
+        flow.findNowhere0FlowsInDirected(flows);
         flows.forEach(System.out::println);
         assertFalse(flows.isEmpty());
     }
@@ -134,17 +134,17 @@ public class BacktrackingFlowTest {
     //Seymour's 6-flow theorem: Every bridgeless graph has a 6-flow.
     @Test
     public void guaranteedFlow() {
-        Graph graph = new Graph(6);
-        graph.addEdge(0, 1);
-        graph.addEdge(0, 2);
-        graph.addEdge(1, 3);
-        graph.addEdge(2, 4);
-        graph.addEdge(3, 5);
-        graph.addEdge(4, 5);
-        graph.addEdge(1, 2);
-        graph.addEdge(3, 4);
-        NowhereZeroFlow flow1 = new BacktrackingFlow(graph, 5);
-        flow1.findNowhere0Flows(flows);
+        DirectedGraph directedGraph = new DirectedGraph(6);
+        directedGraph.addEdge(0, 1);
+        directedGraph.addEdge(0, 2);
+        directedGraph.addEdge(1, 3);
+        directedGraph.addEdge(2, 4);
+        directedGraph.addEdge(3, 5);
+        directedGraph.addEdge(4, 5);
+        directedGraph.addEdge(1, 2);
+        directedGraph.addEdge(3, 4);
+        NowhereZeroFlow flow1 = new BacktrackingFlow(directedGraph, 5);
+        flow1.findNowhere0FlowsInDirected(flows);
         flows.forEach(System.out::println);
         int[][] e = {
                 {1, 1}, {0, 0}
@@ -155,43 +155,126 @@ public class BacktrackingFlowTest {
     //Jaeger's 4-flow theorem: Every 4-edge-connected graph has a 4-flow.
 
     public void guaranteedFlow2() {
-        Graph graph = new Graph(7);
+        DirectedGraph directedGraph = new DirectedGraph(7);
         int maxFlow = 3;
         //4-edge-connected graph (critical graph with chromatic number = 5)
-        graph.addEdge(0, 1);
-        graph.addEdge(0, 2);
-        graph.addEdge(0, 3);
-        graph.addEdge(0, 4);
-        graph.addEdge(1, 3);
-        graph.addEdge(1, 4);
-        graph.addEdge(1, 6);
-        graph.addEdge(2, 3);
-        graph.addEdge(2, 4);
-        graph.addEdge(2, 5);
-        graph.addEdge(3, 4);
-        graph.addEdge(3, 5);
-        graph.addEdge(3, 6);
-        graph.addEdge(4, 5);
-        graph.addEdge(4, 6);
-        graph.addEdge(5, 6);
+        directedGraph.addEdge(0, 1);
+        directedGraph.addEdge(0, 2);
+        directedGraph.addEdge(0, 3);
+        directedGraph.addEdge(0, 4);
+        directedGraph.addEdge(1, 3);
+        directedGraph.addEdge(1, 4);
+        directedGraph.addEdge(1, 6);
+        directedGraph.addEdge(2, 3);
+        directedGraph.addEdge(2, 4);
+        directedGraph.addEdge(2, 5);
+        directedGraph.addEdge(3, 4);
+        directedGraph.addEdge(3, 5);
+        directedGraph.addEdge(3, 6);
+        directedGraph.addEdge(4, 5);
+        directedGraph.addEdge(4, 6);
+        directedGraph.addEdge(5, 6);
 
-        NowhereZeroFlow flow1 = new BacktrackingFlow(graph, maxFlow);
-        flow1.findNowhere0Flows(flows);
+        NowhereZeroFlow flow1 = new BacktrackingFlow(directedGraph, maxFlow);
+        flow1.findNowhere0FlowsInDirected(flows);
         flows.forEach(System.out::println);
         assertFalse(flows.isEmpty());
     }
 
     @Test
+    public void simpleMultigraph2() {
+        DirectedGraph directedGraph = new DirectedGraph(2);
+        directedGraph.addEdge(0, 1);
+        directedGraph.addEdge(0, 1);
+        directedGraph.addEdge(0, 1);
+        directedGraph.addEdge(1, 0);
+        directedGraph.addEdge(1, 0);
+        directedGraph.addEdge(1, 0);
+        NowhereZeroFlow flow1 = new BacktrackingFlow(directedGraph, 1);
+        flow1.findNowhere0FlowsInDirected(flows);
+        assertEquals(flows.size(), 1);
+    }
+    @Test
     public void simpleMultigraph() {
-        Graph graph = new Graph(2);
-        graph.addEdge(0, 1);
-        graph.addEdge(0, 1);
-        graph.addEdge(0, 1);
-        graph.addEdge(1, 0);
-        graph.addEdge(1, 0);
-        graph.addEdge(1, 0);
-        NowhereZeroFlow flow1 = new BacktrackingFlow(graph, 1);
-        flow1.findNowhere0Flows(flows);
+        int[][] a = {{1, 1}, {0, 0}};
+        DirectedGraph directedGraph = new DirectedGraph(a);
+        NowhereZeroFlow flow1 = new BacktrackingFlow(directedGraph, 4);
+        flow1.findNowhere0FlowsInDirected(flows);
+        assertEquals(flows.size(), 1);
+    }
+
+    @Test
+    public void simpleGraph() {
+        int[][] a = {
+                {1, 2}, {0, 2}, {0, 1}
+        };
+        DirectedGraph directedGraph = new DirectedGraph(a);
+        NowhereZeroFlow flow1 = new BacktrackingFlow(directedGraph, 4);
+        flow1.findNowhere0FlowsInDirected(flows);
+    }
+    @Test
+    public void simpleGraph2() {
+        int[][] a = {
+                {1, 3, 4}, {0, 2, 4}, {1, 3, 5}, {0, 2, 5}, {0, 1, 5}, {2, 3, 4}
+        };
+        DirectedGraph directedGraph = new DirectedGraph(a);
+        NowhereZeroFlow flow = new BacktrackingFlow(directedGraph, 2);
+        flow.findNowhere0FlowsInDirected(flows);
+        assertEquals(flows.size(), 1);
+    }
+    @Test
+    public void k33() {
+        int[][] a = {
+                {3, 4, 5}, {3, 4, 5}, {3, 4, 5}, {0, 1, 2}, {0, 1, 2}, {0, 1, 2}
+        };
+        DirectedGraph directedGraph = new DirectedGraph(a);
+        NowhereZeroFlow flow = new BacktrackingFlow(directedGraph, 2);
+        flow.findNowhere0FlowsInDirected(flows);
+        assertEquals(flows.size(), 1);
+    }
+    @Test
+    public void k23() {
+        DirectedGraph directedGraph = new DirectedGraph(4);
+        directedGraph.addEdge(0, 1);
+        directedGraph.addEdge(0, 1);
+        directedGraph.addEdge(0, 1);
+        directedGraph.addEdge(1, 0);
+        directedGraph.addEdge(1, 0);
+        directedGraph.addEdge(1, 0);
+        NowhereZeroFlow flow1 = new BacktrackingFlow(directedGraph, 2);
+        flow1.findNowhere0FlowsInDirected(flows);
+        assertEquals(flows.size(), 1);
+    }
+    @Test
+    public void Y2() {
+        int[][] a = {
+                {1, 2, 3}, {0, 2, 4}, {0, 1, 5}, {0, 4, 5}, {1, 3, 5}, {2, 3, 4}
+        };
+        DirectedGraph directedGraph = new DirectedGraph(a);
+        NowhereZeroFlow flow = new BacktrackingFlow(directedGraph, 2);
+        flow.findNowhere0FlowsInDirected(flows);
+        assertEquals(flows.size(), 1);
+    }
+    @Test
+    public void PetersenGraph() {
+        int[][] a = {
+                {1, 4, 5}, {0, 2, 6}, {1, 3, 7}, {2, 4, 8}, {0, 3, 9},
+                {0, 7, 8}, {1, 8, 9}, {2, 5, 9}, {3, 5, 6}, {4, 6, 7}
+        };
+        DirectedGraph directedGraph = new DirectedGraph(a);
+        NowhereZeroFlow flow = new BacktrackingFlow(directedGraph, 2);
+        flow.findNowhere0FlowsInDirected(flows);
+        assertEquals(flows.size(), 1);
+    }
+    @Test
+    public void flowerSnark2() {
+        int[][] a = {
+                {2,1,1}, {0,3,0}, {0,4,6}, {1,5,7}, {2,7,7},
+                {6,6,3}, {2,5,5}, {4,3,4}
+        };
+        DirectedGraph directedGraph = new DirectedGraph(a);
+        NowhereZeroFlow flow = new BacktrackingFlow(directedGraph, 2);
+        flow.findNowhere0FlowsInDirected(flows);
         assertEquals(flows.size(), 1);
     }
 

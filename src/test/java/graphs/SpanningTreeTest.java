@@ -30,13 +30,13 @@ public class SpanningTreeTest {
     @Test
     public void simpleSpanningTreeTest() {
         int numVertices = 4;
-        Graph graph = new Graph(numVertices);
-        graph.addEdge(0, 1);
-        graph.addEdge(1, 2);
-        graph.addEdge(1, 3);
-        graph.addEdge(0, 2);
-        graph.addEdge(2, 3);
-        PathDecompositionFlow flow = new PathDecompositionFlow(graph);
+        DirectedGraph directedGraph = new DirectedGraph(numVertices);
+        directedGraph.addEdge(0, 1);
+        directedGraph.addEdge(1, 2);
+        directedGraph.addEdge(1, 3);
+        directedGraph.addEdge(0, 2);
+        directedGraph.addEdge(2, 3);
+        PathDecompositionFlow flow = new PathDecompositionFlow(directedGraph);
         List<List<Integer>> spanningTree = flow.getSpanningTree();
         boolean[] contains = new boolean[numVertices];
         for (int from = 0; from < spanningTree.size(); from++) {

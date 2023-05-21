@@ -5,19 +5,19 @@ import java.util.List;
 
 public abstract class NowhereZeroFlow {
     final int MAX_FLOW_VALUE;
-    final Graph graph;
+    final DirectedGraph directedGraph;
     //represents flow, maps neighbours of vertex to the values of flow pointing to neighbours
     List<Pair<Edge, Integer>> flow;
 
-    protected NowhereZeroFlow(Graph graph, int MAX_FLOW_VALUE) {
-        this.MAX_FLOW_VALUE = MAX_FLOW_VALUE;
-        this.graph = graph;
+    protected NowhereZeroFlow(DirectedGraph directedGraph, int maxFlowValue) {
+        this.MAX_FLOW_VALUE = maxFlowValue;
+        this.directedGraph = directedGraph;
         initializeFlow();
     }
 
     public void initializeFlow() {
         flow = new ArrayList<>();
-        List<List<Integer>> adjLists = graph.adjacentLists();
+        List<List<Integer>> adjLists = directedGraph.adjacentLists();
         for (int from = 0; from < adjLists.size(); from++) {
             for (Integer to :
                     adjLists.get(from)) {
@@ -43,19 +43,19 @@ public abstract class NowhereZeroFlow {
 
     //depends on map outgoingEdgesLabelling
     boolean preservesFlow() {
-        for (int from = 0; from < graph.getNumberOfVertices(); from++) {
-            if (!graph.getIncomingEdges(from).isEmpty() &&
-                    !graph.getAdjacentEdges(from).isEmpty()) {
+        for (int from = 0; from < directedGraph.getNumberOfVertices(); from++) {
+            if (!directedGraph.getIncomingEdges(from).isEmpty() &&
+                    !directedGraph.getAdjacentEdges(from).isEmpty()) {
                 int inFlowSum = 0;
                 int outFlowSum = 0;
 
-                List<Edge> adjEdges = graph.getAdjacentEdges(from);
+                List<Edge> adjEdges = directedGraph.getAdjacentEdges(from);
                 for (Pair<Edge, Integer> eval :
                         flow) {
                     if (adjEdges.contains(eval.getA())) outFlowSum += eval.getB();
                 }
 
-                List<Edge> inc = graph.getIncomingEdges(from);
+                List<Edge> inc = directedGraph.getIncomingEdges(from);
                 for (Pair<Edge, Integer> eval :
                         flow) {
                     if (inc.contains(eval.getA())) inFlowSum += eval.getB();
@@ -71,5 +71,6 @@ public abstract class NowhereZeroFlow {
         return this.MAX_FLOW_VALUE;
     }
 
-    public abstract void findNowhere0Flows(List<List<Pair<Edge, Integer>>> flows);
+    public abstract void findNowhere0FlowsInDirected(List<List<Pair<Edge, Integer>>> flows);
+    public abstract void findNowhere0FlowsInUndirected(List<List<Pair<Edge, Integer>>> flows);
 }

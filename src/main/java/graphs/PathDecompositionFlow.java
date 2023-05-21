@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PathDecompositionFlow {
-    Graph graph;
+    DirectedGraph directedGraph;
 
-    PathDecompositionFlow(Graph graph) {
-        this.graph = graph;
+    PathDecompositionFlow(DirectedGraph directedGraph) {
+        this.directedGraph = directedGraph;
     }
 
     public static void main(String[] args) {
@@ -17,7 +17,7 @@ public class PathDecompositionFlow {
         }
 
 
-        Graph flowNetwork = new Graph(4);
+        DirectedGraph flowNetwork = new DirectedGraph(4);
         flowNetwork.addEdge(0, 1);
         flowNetwork.addEdge(1, 2);
         flowNetwork.addEdge(1, 3);
@@ -34,7 +34,7 @@ public class PathDecompositionFlow {
         if (parent != -1) {
             tree.get(parent).add(v);
         }
-        List<Integer> vertices = graph.getAdjacentEdges(v).stream().map(Edge::to).toList();
+        List<Integer> vertices = directedGraph.getAdjacentEdges(v).stream().map(Edge::to).toList();
 
         for (int n : vertices) {
             if (!visited[n]) {
@@ -44,9 +44,9 @@ public class PathDecompositionFlow {
     }
 
     List<List<Integer>> DFS(int v) {
-        boolean[] visited = new boolean[graph.getNumberOfVertices()];
+        boolean[] visited = new boolean[directedGraph.getNumberOfVertices()];
         List<List<Integer>> tree = new ArrayList<>();
-        for (int i = 0; i < graph.getNumberOfVertices(); i++) {
+        for (int i = 0; i < directedGraph.getNumberOfVertices(); i++) {
             tree.add(new ArrayList<>());
         }
 
