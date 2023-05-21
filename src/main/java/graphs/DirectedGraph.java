@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class DirectedGraph implements GraphInterface{
+public class DirectedGraph implements Graph {
     List<List<Edge>> edges;
     int numOfVertices;
 
@@ -106,6 +106,11 @@ public class DirectedGraph implements GraphInterface{
                     .toList()));
         }
         return adjacentLists;
+    }
+
+    @Override
+    public boolean isDirected() {
+        return true;
     }
 }
 

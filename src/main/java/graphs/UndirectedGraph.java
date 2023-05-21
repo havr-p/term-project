@@ -1,11 +1,10 @@
 package graphs;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class UndirectedGraph implements GraphInterface{
+public class UndirectedGraph implements Graph {
     List<List<Integer>> edges;
     public UndirectedGraph(int numOfVertices) {
         this.edges = new ArrayList<>();
@@ -108,5 +107,10 @@ public class UndirectedGraph implements GraphInterface{
 
     public List<List<Integer>> adjacentLists() {
         return Collections.unmodifiableList(edges);
+    }
+
+    @Override
+    public boolean isDirected() {
+        return false;
     }
 }

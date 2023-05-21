@@ -13,21 +13,17 @@ public class BacktrackingFlow extends NowhereZeroFlow {
 
 
     @Override
-    public void findNowhere0FlowsInDirected(List<List<Pair<Edge, Integer>>> flows) {
+    public void findNowhere0Flows(List<List<Pair<Edge, Integer>>> flows) {
         findNowhere0FlowsHelper(0, flows);
     }
 
-    @Override
-    public void findNowhere0FlowsInUndirected(List<List<Pair<Edge, Integer>>> flows) {
-
-    }
 
     /**
      * @param edgeIndex - vertex, from which we continue to compute required network flow
      */
     private void findNowhere0FlowsHelper(int edgeIndex, List<List<Pair<Edge, Integer>>> flows) {
-        if (edgeIndex == this.directedGraph.getNumberOfEdges()) {
-            if (preservesFlow() && directedGraph.getNumberOfEdges() > 0) {
+        if (edgeIndex == this.graph.getNumberOfEdges()) {
+            if (preservesFlow() && graph.getNumberOfEdges() > 0) {
                 // System.out.println("flow is valid");
                 System.out.println(flow);
                 flows.add(Collections.unmodifiableList(deepCopyFlow(flow)));

@@ -11,14 +11,13 @@ import java.util.*;
 
 public class LPFlow extends NowhereZeroFlow {
 
-    //IntVar flowVar = model.intVar("f", 1, MAX_FLOW_VALUE);
     private final int V;
     Model model = new Model("nowhere-zero 5-flow");
     List<List<List<IntVar>>> edgeVariables = new ArrayList<>();
 
-    protected LPFlow(DirectedGraph directedGraph, int MAX_FLOW_VALUE) {
+    protected LPFlow(Graph directedGraph, int MAX_FLOW_VALUE) {
         super(directedGraph, MAX_FLOW_VALUE);
-        this.V = directedGraph.numOfVertices;
+        this.V = directedGraph.getNumberOfVertices();
         //System.out.println(V);
         for (int i = 0; i < V; i++) {
             edgeVariables.add(new ArrayList<>());
@@ -37,32 +36,38 @@ public class LPFlow extends NowhereZeroFlow {
         directedGraph.addEdge(2, 3);
         NowhereZeroFlow flow = new LPFlow(directedGraph, 4);
         List<List<Pair<Edge, Integer>>> flows = new ArrayList<>();
-        flow.findNowhere0FlowsInDirected(flows);
+        flow.findNowhere0Flows(flows);
     }
 
-    private void setVariablesDirected() {
-        List<List<Integer>> edges = directedGraph.adjacentLists();
+    private void setVariables() {
+        List<List<Integer>> edges = graph.adjacentLists();
         List<Map<Integer, Integer>> multi = new ArrayList<>();
         for (int i = 0; i < V; i++) {
             multi.add(new HashMap<>());
         }
         //System.out.println(edges);
         //System.out.println(multi);
-        for (int from = 0; from < V; from++) {
-            for (int to :
-                    edges.get(from)) {
-                int count = multi.get(from).getOrDefault(to, 0);
-                String name = String.format("x_%d_%d_%d", from, to, count);
-                multi.get(from).put(to, count + 1);
-                IntVar edgeVar = model.intVar(name, 1, MAX_FLOW_VALUE);
-               // System.out.println("next edge var  " + edgeVar);
-                edgeVariables.get(from).get(to).add(edgeVar);
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < edges.get(i).size(); j++) {
+                int u = i;
+                int w = edges.get(u).get(i);
+                int count = multi.get(u).getOrDefault(w, 0);
+                String name = String.format("x_%d_%d_%d", u, w, count);
+                IntVar edgeVar;
+                if (graph.isDirected())
+                    edgeVar = model.intVar(name, 1, MAX_FLOW_VALUE);
+                else {
+                    edgeVar = model.intVar(name, -MAX_FLOW_VALUE, MAX_FLOW_VALUE);
+                    model.arithm(edgeVar, "!=", 0).post();
+                }
+                edgeVariables.get(u).get(w).add(edgeVar);
+                multi.get(u).put(w, count + 1);
             }
         }
-        //flowVar = model.intVar("flow", 1, MAX_FLOW_VALUE);
     }
 
-    private void addFlowConstraints() {
+
+    private void addFlowConstraintsDirected() {
         for (int from = 0; from < V; from++) {
             List<IntVar> outgoingEdges = edgeVariables.get(from).stream().flatMap(Collection::stream).toList();
             List<IntVar> ingoingEdges = new ArrayList<>();
@@ -80,14 +85,58 @@ public class LPFlow extends NowhereZeroFlow {
         }
     }
 
+    private void addFlowConstraintsUndirected() {
+        System.out.println(graph.adjacentLists());
+        for (int i = 0; i < edgeVariables.size(); i++) {
+            System.out.println(edgeVariables.get(i));
+            /*List<IntVar> left = new ArrayList<>();
+            List<IntVar> right = new ArrayList<>();
+            for (int j = 0; j < edgeVariables.get(i).size(); j++) {
+                    if (i < j)
+                        left.addAll(Collections.unmodifiableList(edgeVariables.get(i).get(j)));
+                    else
+                        right.addAll(Collections.unmodifiableList(edgeVariables.get(j).get(i)));
+                }
+            IntVar[] leftArr = left.toArray(new IntVar[0]);
+            IntVar[] rightArr = right.toArray(new IntVar[0]);
+            System.out.println(Arrays.toString(leftArr));
+            System.out.println(Arrays.toString(rightArr));
+             Constraint c = model.sum(leftArr, "=", rightArr);
+            System.out.println(c);
+            c.post();*/
+            List<IntVar> sum = new ArrayList<>();
+            List<IntVar> left = new ArrayList<>();
+            List<IntVar> right = new ArrayList<>();
+            for (int j = 0; j < edgeVariables.get(i).size(); j++) {
+                for (int k = 0; k < edgeVariables.get(i).get(j).size(); k++) {
+                    if (i < j) {
+                        //sum.add(edgeVariables.get(i).get(j).get(k));
+                        left.add(edgeVariables.get(i).get(j).get(k));
+                    } else {
+                        //sum.add(edgeVariables.get(j).get(i).get(k).neg().intVar());
+                        right.add(edgeVariables.get(j).get(i).get(k));
+                    }
+                }
+            }
+            IntVar[] sumArr = sum.toArray(new IntVar[0]);
+            IntVar[] leftArr = left.toArray(new IntVar[0]);
+            IntVar[] rightArr = right.toArray(new IntVar[0]);
+            model.sum(leftArr, "=", rightArr).post();
+        }
+    }
+
     @Override
-    public void findNowhere0FlowsInDirected(List<List<Pair<Edge, Integer>>> flows) {
-        setVariablesDirected();
-        addFlowConstraints();
+    public void findNowhere0Flows(List<List<Pair<Edge, Integer>>> flows) {
+        setVariables();
+        if (graph.isDirected()) {
+            addFlowConstraintsDirected();
+        } else {
+            addFlowConstraintsDirected();
+        }
         //prepared to solve
         Solver solver = model.getSolver();
-        //System.out.println(model);
-        while (solver.solve()) {
+        System.out.println(model);
+        if (solver.solve()) {
             Solution solution = new Solution(model);
             solution.record();
             List<IntVar> vars = solution.retrieveIntVars(false);
@@ -96,20 +145,14 @@ public class LPFlow extends NowhereZeroFlow {
                 IntVar v = vars.get(i);
 
             }
-            //System.out.println(solver.getSearchState());
-           /* System.out.println("________________SOLUTION________________");
+            System.out.println(solver.getSearchState());
+            System.out.println("________________SOLUTION________________");
             for (int i = 0; i < vars.size(); i++) {
                 System.out.println(vars.get(i).getName() +
                         ":  " + vars.get(i).getValue());
             }
-            System.out.println("__________________END__________________");*/
+            System.out.println("__________________END__________________");
             // do something, e.g. print out variable values
         }
     }
-
-    @Override
-    public void findNowhere0FlowsInUndirected(List<List<Pair<Edge, Integer>>> flows) {
-
-    }
-
 }

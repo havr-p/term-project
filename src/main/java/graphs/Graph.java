@@ -4,7 +4,7 @@ import java.util.List;
 
 /* Rozhranie pre reprezentaciu grafu o vrcholoch 0, 1, ..., n-1 pre nejake
    prirodzene cislo n: */
-interface GraphInterface {
+interface Graph {
     int getNumberOfVertices(); // Vrati pocet vrcholov grafu.
 
     int getNumberOfOutgoingEdges(int from);
@@ -28,4 +28,6 @@ interface GraphInterface {
     List<Edge> getIncomingEdges(int to);
 
     List<Edge> getEdgeList();
+    List<List<Integer>> adjacentLists();
+    boolean isDirected();
 }
