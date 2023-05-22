@@ -1,6 +1,9 @@
 package graphs;
 
+import org.chocosolver.solver.Solution;
+import org.chocosolver.solver.variables.IntVar;
 import org.hamcrest.CoreMatchers;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -9,7 +12,9 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
@@ -35,11 +40,6 @@ public class LPFlowTest {
         flows.clear();
     }
 
-    public int factorial(int n) {
-        int fact = 1;
-        for (int i = 2; i <= n; i++) fact *= i;
-        return fact;
-    }
 
     @Test
     public void simplestBactrackingFlowTest() {
@@ -350,5 +350,28 @@ public class LPFlowTest {
         NowhereZeroFlow flow = new LPFlow(graph, 2);
         flow.findNowhere0Flows(flows);
         assertEquals(1, flows.size());
+    }
+    @Test
+    public void directedLPTest() {
+        int[][] a = {
+                {1, 2, 3},
+                {0},
+                {0},
+                {0}
+        };
+        DirectedGraph graph =  new DirectedGraph(a);
+        NowhereZeroFlow flow = new LPFlow(graph, 2);
+        flow.findNowhere0Flows(flows);
+    }
+    @Test
+    public void undirectedLPTest() {
+        int[][] a = {
+                {1, 2},
+                {0},
+                {0}
+        };
+        UndirectedGraph graph =  new UndirectedGraph(a);
+        NowhereZeroFlow flow = new LPFlow(graph, 1);
+        flow.findNowhere0Flows(flows);
     }
 }
