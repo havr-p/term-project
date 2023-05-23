@@ -63,8 +63,8 @@ public class LPFlowTest {
         DirectedGraph directedGraph = new DirectedGraph(3);
         directedGraph.addEdge(0, 1);
         directedGraph.addEdge(1, 2);
-        NowhereZeroFlow flow1 = new LPFlow(directedGraph, 4);
-        flow1.findNowhere0Flows(flows);
+        LPFlow flow = new LPFlow(directedGraph, 4);
+        flow.findNowhere0Flows(flows);
         for (int i = 1; i < 5; i++) {
             List<Pair<Edge, Integer>> expectedFlow = List.of(new Pair<>(new Edge(0, 1), i),
                     new Pair<>(new Edge(1, 2), i));
@@ -85,7 +85,7 @@ public class LPFlowTest {
         directedGraph.addEdge(0, 2);
         directedGraph.addEdge(1, 3);
         directedGraph.addEdge(2, 3);
-        NowhereZeroFlow flow = new LPFlow(directedGraph, 4);
+        LPFlow flow = new LPFlow(directedGraph, 4);
 
         flow.findNowhere0Flows(flows);
         assertThat(flows.size(), is(16));
@@ -100,8 +100,8 @@ public class LPFlowTest {
         directedGraph.addEdge(2, 4);
         directedGraph.addEdge(3, 5);
         directedGraph.addEdge(4, 5);
-        NowhereZeroFlow flow1 = new LPFlow(directedGraph, 4);
-        flow1.findNowhere0Flows(flows);
+        LPFlow flow = new LPFlow(directedGraph, 4);
+        flow.findNowhere0Flows(flows);
         flows.forEach(System.out::println);
         assertThat(flows.size(), is(16));
     }
@@ -109,7 +109,7 @@ public class LPFlowTest {
     @Test
     public void emptyFlowTest() {
         DirectedGraph directedGraph = new DirectedGraph(5);
-        NowhereZeroFlow flow = new LPFlow(directedGraph, 4);
+        LPFlow flow = new LPFlow(directedGraph, 4);
         flow.findNowhere0Flows(flows);
         assertTrue(flows.isEmpty());
     }
@@ -121,7 +121,7 @@ public class LPFlowTest {
         directedGraph.addEdge(0, 2);
         directedGraph.addEdge(1, 3);
         directedGraph.addEdge(2, 3);
-        NowhereZeroFlow flow = new LPFlow(directedGraph, 4);
+        LPFlow flow = new LPFlow(directedGraph, 4);
         flow.findNowhere0Flows(flows);
         flows.forEach(System.out::println);
         assertFalse(flows.isEmpty());
@@ -140,8 +140,8 @@ public class LPFlowTest {
         directedGraph.addEdge(4, 5);
         directedGraph.addEdge(1, 2);
         directedGraph.addEdge(3, 4);
-        NowhereZeroFlow flow1 = new LPFlow(directedGraph, 5);
-        flow1.findNowhere0Flows(flows);
+        LPFlow flow = new LPFlow(directedGraph, 5);
+        flow.findNowhere0Flows(flows);
         flows.forEach(System.out::println);
         assertFalse(flows.isEmpty());
     }
@@ -169,8 +169,8 @@ public class LPFlowTest {
         directedGraph.addEdge(4, 6);
         directedGraph.addEdge(5, 6);
 
-        NowhereZeroFlow flow1 = new LPFlow(directedGraph, maxFlow);
-        flow1.findNowhere0Flows(flows);
+        LPFlow flow = new LPFlow(directedGraph, maxFlow);
+        flow.findNowhere0Flows(flows);
         flows.forEach(System.out::println);
         assertFalse(flows.isEmpty());
     }
@@ -179,9 +179,10 @@ public class LPFlowTest {
     public void simpleMultigraph() {
         int[][] a = {{1, 1}, {0, 0}};
         Graph graph = new UndirectedGraph(a);
-        NowhereZeroFlow flow1 = new LPFlow(graph, 3);
-        flow1.findNowhere0Flows(flows);
-        assertEquals(1, flows.size());
+        LPFlow flow = new LPFlow(graph, 3);
+        Solution s = flow.getSolution();
+        TestUtil.assertLPFlowIsAFlow(s);
+        TestUtil.assertLPFlowNowhere0(s);
     }
 
     @Test
@@ -190,8 +191,10 @@ public class LPFlowTest {
                 {1, 2}, {0, 2}, {0, 1}
         };
         Graph graph = new UndirectedGraph(a);
-        NowhereZeroFlow flow1 = new LPFlow(graph, 4);
-        flow1.findNowhere0Flows(flows);
+        LPFlow flow = new LPFlow(graph, 4);
+        Solution s = flow.getSolution();
+        TestUtil.assertLPFlowIsAFlow(s);
+        TestUtil.assertLPFlowNowhere0(s);
     }
     @Test
     public void simpleGraph2() {
@@ -199,9 +202,11 @@ public class LPFlowTest {
                 {1, 3, 4}, {0, 2, 4}, {1, 3, 5}, {0, 2, 5}, {0, 1, 5}, {2, 3, 4}
         };
         Graph graph = new UndirectedGraph(a);
-        NowhereZeroFlow flow = new LPFlow(graph, 2);
+        LPFlow flow = new LPFlow(graph, 2);
         flow.findNowhere0Flows(flows);
-        assertEquals(1, flows.size());
+        Solution s = flow.getSolution();
+        TestUtil.assertLPFlowIsAFlow(s);
+        TestUtil.assertLPFlowNowhere0(s);
     }
     @Test
     public void k33() {
@@ -209,9 +214,11 @@ public class LPFlowTest {
                 {3, 4, 5}, {3, 4, 5}, {3, 4, 5}, {0, 1, 2}, {0, 1, 2}, {0, 1, 2}
         };
         Graph graph = new UndirectedGraph(a);
-        NowhereZeroFlow flow = new LPFlow(graph, 2);
+        LPFlow flow = new LPFlow(graph, 2);
         flow.findNowhere0Flows(flows);
-        assertEquals(flows.size(), 1);
+        Solution s = flow.getSolution();
+        TestUtil.assertLPFlowIsAFlow(s);
+        TestUtil.assertLPFlowNowhere0(s);
     }
     @Test
     public void k23() {
@@ -222,9 +229,10 @@ public class LPFlowTest {
         graph.addEdge(1, 0);
         graph.addEdge(1, 0);
         graph.addEdge(1, 0);
-        NowhereZeroFlow flow1 = new LPFlow(graph, 2);
-        flow1.findNowhere0Flows(flows);
-        assertEquals(1, flows.size());
+        LPFlow flow = new LPFlow(graph, 2);
+        Solution s = flow.getSolution();
+        TestUtil.assertLPFlowIsAFlow(s);
+        TestUtil.assertLPFlowNowhere0(s);
     }
     @Test
     public void Y2() {
@@ -232,9 +240,10 @@ public class LPFlowTest {
                 {1, 2, 3}, {0, 2, 4}, {0, 1, 5}, {0, 4, 5}, {1, 3, 5}, {2, 3, 4}
         };
         Graph graph = new UndirectedGraph(a);
-        NowhereZeroFlow flow = new LPFlow(graph, 2);
-        flow.findNowhere0Flows(flows);
-        assertEquals(flows.size(), 1);
+        LPFlow flow = new LPFlow(graph, 2);
+        Solution s = flow.getSolution();
+        TestUtil.assertLPFlowIsAFlow(s);
+        TestUtil.assertLPFlowNowhere0(s);
     }
     @Test
     public void PetersenGraph() {
@@ -243,9 +252,10 @@ public class LPFlowTest {
                 {0, 7, 8}, {1, 8, 9}, {2, 5, 9}, {3, 5, 6}, {4, 6, 7}
         };
         UndirectedGraph graph =  new UndirectedGraph(a);
-        NowhereZeroFlow flow = new LPFlow(graph, 2);
-        flow.findNowhere0Flows(flows);
-        assertEquals(1, flows.size());
+        LPFlow flow = new LPFlow(graph, 2);
+        Solution s = flow.getSolution();
+        TestUtil.assertLPFlowIsAFlow(s);
+        TestUtil.assertLPFlowNowhere0(s);
     }
     @Test
     public void flowerSnark2() {
@@ -254,10 +264,11 @@ public class LPFlowTest {
                 {6,6,3}, {2,5,5}, {4,3,4}
         };
         Graph graph = new UndirectedGraph(a);
-        NowhereZeroFlow flow = new LPFlow(graph, 2);
+        LPFlow flow = new LPFlow(graph, 2);
         flow.findNowhere0Flows(flows);
-        System.out.println(flows);
-        assertEquals(1, flows.size());
+        Solution s = flow.getSolution();
+        TestUtil.assertLPFlowIsAFlow(s);
+        TestUtil.assertLPFlowNowhere0(s);
     }
     @Test
     public void flowerSnark3() {
@@ -267,9 +278,10 @@ public class LPFlowTest {
                 {0, 5, 9}, {1, 4, 9}
         };
         UndirectedGraph directedGraph =  new UndirectedGraph(a);
-        NowhereZeroFlow flow = new LPFlow(directedGraph, 2);
-        flow.findNowhere0Flows(flows);
-        assertEquals(1, flows.size());
+        LPFlow flow = new LPFlow(directedGraph, 2);
+        Solution s = flow.getSolution();
+        TestUtil.assertLPFlowIsAFlow(s);
+        TestUtil.assertLPFlowNowhere0(s);
     }
     @Test
     public void flowerSnark4() {
@@ -280,9 +292,10 @@ public class LPFlowTest {
                 {10,7,8}
         };
         UndirectedGraph directedGraph =  new UndirectedGraph(a);
-        NowhereZeroFlow flow = new LPFlow(directedGraph, 2);
-        flow.findNowhere0Flows(flows);
-        assertEquals(1, flows.size());
+        LPFlow flow = new LPFlow(directedGraph, 2);
+        Solution s = flow.getSolution();
+        TestUtil.assertLPFlowIsAFlow(s);
+        TestUtil.assertLPFlowNowhere0(s);
     }
     @Test
     public void flowerSnark5() {
@@ -293,9 +306,10 @@ public class LPFlowTest {
                 {2, 16, 19}, {4, 15, 17}, {9, 16, 18}, {12, 17, 19}, {7, 15, 18}
         };
         UndirectedGraph directedGraph =  new UndirectedGraph(a);
-        NowhereZeroFlow flow = new LPFlow(directedGraph, 2);
-        flow.findNowhere0Flows(flows);
-        assertEquals(1, flows.size());
+        LPFlow flow = new LPFlow(directedGraph, 2);
+        Solution s = flow.getSolution();
+        TestUtil.assertLPFlowIsAFlow(s);
+        TestUtil.assertLPFlowNowhere0(s);
     }
     @Test
     public void flowerSnark7() {
@@ -308,9 +322,10 @@ public class LPFlowTest {
                 {6, 26, 27}, {8, 23, 25}, {9, 24, 25}
         };
         UndirectedGraph directedGraph =  new UndirectedGraph(a);
-        NowhereZeroFlow flow = new LPFlow(directedGraph, 2);
-        flow.findNowhere0Flows(flows);
-        assertEquals(1, flows.size());
+        LPFlow flow = new LPFlow(directedGraph, 2);
+        Solution s = flow.getSolution();
+        TestUtil.assertLPFlowIsAFlow(s);
+        TestUtil.assertLPFlowNowhere0(s);
     }
     @Test
     public void flowerSnark11() {
@@ -326,9 +341,10 @@ public class LPFlowTest {
                 {28,18,30}, {29,19,31}, {30,20,32}, {31,21,22}
         };
         UndirectedGraph directedGraph =  new UndirectedGraph(a);
-        NowhereZeroFlow flow = new LPFlow(directedGraph, 2);
-        flow.findNowhere0Flows(flows);
-        assertEquals(1, flows.size());
+        LPFlow flow = new LPFlow(directedGraph, 2);
+        Solution s = flow.getSolution();
+        TestUtil.assertLPFlowIsAFlow(s);
+        TestUtil.assertLPFlowNowhere0(s);
     }
     @Test
     public void flowerSnark15() {
@@ -347,9 +363,10 @@ public class LPFlowTest {
                 {39,25,41}, {40,26,42}, {41,27,43}, {42,28,44}, {43,29,30}
         };
         UndirectedGraph graph =  new UndirectedGraph(a);
-        NowhereZeroFlow flow = new LPFlow(graph, 2);
-        flow.findNowhere0Flows(flows);
-        assertEquals(1, flows.size());
+        LPFlow flow = new LPFlow(graph, 2);
+        Solution s = flow.getSolution();
+        TestUtil.assertLPFlowIsAFlow(s);
+        TestUtil.assertLPFlowNowhere0(s);
     }
     @Test
     public void directedLPTest() {
@@ -360,8 +377,10 @@ public class LPFlowTest {
                 {0}
         };
         DirectedGraph graph =  new DirectedGraph(a);
-        NowhereZeroFlow flow = new LPFlow(graph, 2);
-        flow.findNowhere0Flows(flows);
+        LPFlow flow = new LPFlow(graph, 2);
+        Solution s = flow.getSolution();
+        TestUtil.assertLPFlowIsAFlow(s);
+        TestUtil.assertLPFlowNowhere0(s);
     }
     @Test
     public void undirectedLPTest() {
@@ -371,7 +390,9 @@ public class LPFlowTest {
                 {0}
         };
         UndirectedGraph graph =  new UndirectedGraph(a);
-        NowhereZeroFlow flow = new LPFlow(graph, 1);
-        flow.findNowhere0Flows(flows);
+        LPFlow flow = new LPFlow(graph, 1);
+        Solution s = flow.getSolution();
+        TestUtil.assertLPFlowIsAFlow(s);
+        TestUtil.assertLPFlowNowhere0(s);
     }
 }

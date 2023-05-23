@@ -15,9 +15,9 @@ public class LPFlow extends NowhereZeroFlow {
     Model model = new Model("nowhere-zero 5-flow");
     List<List<List<IntVar>>> edgeVariables = new ArrayList<>();
 
-    protected LPFlow(Graph directedGraph, int MAX_FLOW_VALUE) {
-        super(directedGraph, MAX_FLOW_VALUE);
-        this.V = directedGraph.getNumberOfVertices();
+    protected LPFlow(Graph graph, int MAX_FLOW_VALUE) {
+        super(graph, MAX_FLOW_VALUE);
+        this.V = graph.getNumberOfVertices();
         //System.out.println(V);
         for (int i = 0; i < V; i++) {
             edgeVariables.add(new ArrayList<>());
@@ -74,10 +74,10 @@ public class LPFlow extends NowhereZeroFlow {
                     int count = multi.get(u).getOrDefault(w, 0);
                     String name = String.format("x_%d_%d_%d", u, w, count);
                     multi.get(u).put(w, count + 1);
-                    IntVar var = model.intVar(name, -MAX_FLOW_VALUE, MAX_FLOW_VALUE);
-                    model.arithm(var, "!=", 0).post();
-                    edgeVariables.get(u).get(w).add(var);
-                    edgeVariables.get(w).get(u).add(var.neg().intVar());
+                    IntVar eVar = model.intVar(name, -MAX_FLOW_VALUE, MAX_FLOW_VALUE);
+                    model.arithm(eVar, "!=", 0).post();
+                    edgeVariables.get(u).get(w).add(eVar);
+                    edgeVariables.get(w).get(u).add(eVar.neg().intVar());
                 }
             }
         }
