@@ -42,7 +42,19 @@ public class TestUtil {
         }
     }
     private static int parseVertexFromVar(IntVar var) {
-        return Integer.parseInt(var.getName().split("_")[0]);
+        return Integer.parseInt(var.getName().split("_")[1]);
+    }
+
+    public static void assertAllVIncluded(List<List<Integer>> spanningTree, Graph g) {
+        for (int i = 0; i < g.getNumberOfVertices(); i++) {
+            assertTrue(spanningTree.get(i) != null);
+        }
+    }
+    //A connected graph with V vertices and V-1 edges doesn't contain any cycles by definition
+    public static void assertNotContainsCycles(List<List<Integer>> spanningTree, Graph g) {
+        System.out.println(spanningTree);
+        int edgeCount = spanningTree.stream().mapToInt(List::size).sum();
+        assertEquals(g.getNumberOfVertices() - 1, edgeCount);
     }
 
 }

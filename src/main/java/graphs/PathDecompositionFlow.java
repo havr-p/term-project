@@ -42,4 +42,12 @@ public class PathDecompositionFlow {
         return DFS(0);
     }
 
+    private void findNowhere0FlowsHelper(int edgeIndex, List<List<Pair<Edge, Integer>>> flows) {
+
+    }
+
+    private double[][] getDirectionMatrix(Graph graph, List<List<Integer>> spanningTree) {
+
+    }
+
 }

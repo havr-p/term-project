@@ -46,4 +46,6 @@ public abstract class NowhereZeroFlow {
     }
 
     public abstract void findNowhere0Flows(List<List<Pair<Edge, Integer>>> flows);
+    //only when we have edges u->v and also v->u (what it will be in case of undirected graph)?
+    public boolean shouldAddFlowConstraint() {return false;}
 }

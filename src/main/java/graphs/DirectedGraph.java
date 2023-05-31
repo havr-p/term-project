@@ -31,6 +31,18 @@ public class DirectedGraph implements Graph {
             }
         }
     }
+    public DirectedGraph(List<List<Integer>> edges) {
+        this.numOfVertices = edges.size();
+        this.edges = new ArrayList<>();
+        for (int i = 0; i < numOfVertices; i++) {
+            this.edges.add(new ArrayList<>());
+        }
+        for (int i = 0; i < edges.size(); i++) {
+            for (int j = 0; j < edges.get(i).size(); j++) {
+                addEdge(i, edges.get(i).get(j));
+            }
+        }
+    }
 
 
     public int getNumberOfVertices() {
