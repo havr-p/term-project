@@ -281,7 +281,7 @@ public class LPFlowTest {
                 {0, 5, 9}, {1, 4, 9}
         };
         UndirectedGraph directedGraph = new UndirectedGraph(a);
-        LPFlow flow = new LPFlow(directedGraph, 5);
+        LPFlow flow = new LPFlow(directedGraph, 2);
         Solution s = flow.getSolution();
         TestUtil.assertLPFlowIsAFlow(s);
         TestUtil.assertLPFlowNowhere0(s);

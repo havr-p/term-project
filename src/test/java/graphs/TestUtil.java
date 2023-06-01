@@ -4,7 +4,6 @@ import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.variables.IntVar;
 import org.junit.Assert;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +36,7 @@ public class TestUtil {
         List<IntVar> vars = solution.retrieveIntVars(false);
         for (IntVar v :
                 vars) {
-            int vertex = parseVertexFromVar(v);
+            int vertex = parseFromVertexFromVar(v);
             int sum = flow.getOrDefault(vertex, 0) + v.getValue();
             flow.put(vertex, sum);
         }
@@ -47,7 +46,7 @@ public class TestUtil {
         }
     }
 
-    private static int parseVertexFromVar(IntVar var) {
+    private static int parseFromVertexFromVar(IntVar var) {
         return Integer.parseInt(var.getName().split("_")[1]);
     }
 
