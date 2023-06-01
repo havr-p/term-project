@@ -4,6 +4,7 @@ import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.variables.IntVar;
 import org.junit.Assert;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

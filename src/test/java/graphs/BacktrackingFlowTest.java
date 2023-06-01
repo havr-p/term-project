@@ -2,11 +2,13 @@ package graphs;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
+import org.junit.runners.MethodSorters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +16,7 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
-
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BacktrackingFlowTest {
 
     @Rule
@@ -44,7 +46,7 @@ public class BacktrackingFlowTest {
     }
 
     @Test
-    public void simplestBactrackingFlowTest() {
+    public void _1_simplestBactrackingFlowTest() {
         DirectedGraph directedGraph = new DirectedGraph(2);
         directedGraph.addEdge(0, 1);
         // NowhereZeroFlow flow = new BruteForceFlow(graph,  4);
@@ -62,7 +64,7 @@ public class BacktrackingFlowTest {
     }
 
     @Test
-    public void BactrackingFlowTest1() {
+    public void _2_BactrackingFlowTest1() {
         DirectedGraph directedGraph = new DirectedGraph(3);
         directedGraph.addEdge(0, 1);
         directedGraph.addEdge(1, 2);
@@ -80,7 +82,7 @@ public class BacktrackingFlowTest {
     }
 
     @Test
-    public void BactrackingFlowTest2() {
+    public void _3_BactrackingFlowTest2() {
         //square
 
         DirectedGraph directedGraph = new DirectedGraph(4);
@@ -95,7 +97,7 @@ public class BacktrackingFlowTest {
     }
 
     @Test
-    public void BactrackingFlowTest3() {
+    public void _4_BactrackingFlowTest3() {
         DirectedGraph directedGraph = new DirectedGraph(6);
         directedGraph.addEdge(0, 1);
         directedGraph.addEdge(0, 2);
@@ -110,7 +112,7 @@ public class BacktrackingFlowTest {
     }
 
     @Test
-    public void emptyFlowTest() {
+    public void _5_emptyFlowTest() {
         DirectedGraph directedGraph = new DirectedGraph(5);
         NowhereZeroFlow flow = new BacktrackingFlow(directedGraph, 4);
         flow.findNowhere0Flows(flows);
@@ -118,7 +120,7 @@ public class BacktrackingFlowTest {
     }
 
     @Test
-    public void minimalpossibleFlowTest() {
+    public void _6_minimalpossibleFlowTest() {
         DirectedGraph directedGraph = new DirectedGraph(4);
         directedGraph.addEdge(0, 1);
         directedGraph.addEdge(0, 2);
@@ -133,7 +135,7 @@ public class BacktrackingFlowTest {
 
     //Seymour's 6-flow theorem: Every bridgeless graph has a 6-flow.
     @Test
-    public void guaranteedFlow() {
+    public void _7_guaranteedFlow() {
         DirectedGraph directedGraph = new DirectedGraph(6);
         directedGraph.addEdge(0, 1);
         directedGraph.addEdge(0, 2);
@@ -154,7 +156,7 @@ public class BacktrackingFlowTest {
 
     //Jaeger's 4-flow theorem: Every 4-edge-connected graph has a 4-flow.
 
-    public void guaranteedFlow2() {
+    public void _8_guaranteedFlow2() {
         DirectedGraph directedGraph = new DirectedGraph(7);
         int maxFlow = 3;
         //4-edge-connected graph (critical graph with chromatic number = 5)
@@ -182,7 +184,7 @@ public class BacktrackingFlowTest {
     }
 
     @Test
-    public void simpleMultigraph2() {
+    public void _8_simpleMultigraph2() {
         DirectedGraph directedGraph = new DirectedGraph(2);
         directedGraph.addEdge(0, 1);
         directedGraph.addEdge(0, 1);
@@ -196,7 +198,7 @@ public class BacktrackingFlowTest {
     }
 
     @Test
-    public void simpleMultigraph() {
+    public void _8_simpleMultigraph() {
         int[][] a = {{1, 1}, {0, 0}};
         DirectedGraph directedGraph = new DirectedGraph(a);
         NowhereZeroFlow flow1 = new BacktrackingFlow(directedGraph, 4);
@@ -205,7 +207,7 @@ public class BacktrackingFlowTest {
     }
 
     @Test
-    public void simpleGraph() {
+    public void _9_simpleGraph() {
         int[][] a = {
                 {1, 2}, {0, 2}, {0, 1}
         };
@@ -215,7 +217,7 @@ public class BacktrackingFlowTest {
     }
 
     @Test
-    public void simpleGraph2() {
+    public void _9_simpleGraph2() {
         int[][] a = {
                 {1, 3, 4}, {0, 2, 4}, {1, 3, 5}, {0, 2, 5}, {0, 1, 5}, {2, 3, 4}
         };
@@ -226,7 +228,7 @@ public class BacktrackingFlowTest {
     }
 
     @Test
-    public void k33() {
+    public void _9_k33() {
         int[][] a = {
                 {3, 4, 5}, {3, 4, 5}, {3, 4, 5}, {0, 1, 2}, {0, 1, 2}, {0, 1, 2}
         };
@@ -237,7 +239,7 @@ public class BacktrackingFlowTest {
     }
 
     @Test
-    public void k23() {
+    public void _9_k23() {
         DirectedGraph directedGraph = new DirectedGraph(4);
         directedGraph.addEdge(0, 1);
         directedGraph.addEdge(0, 1);
@@ -251,7 +253,7 @@ public class BacktrackingFlowTest {
     }
 
     @Test
-    public void Y2() {
+    public void _9_Y2() {
         int[][] a = {
                 {1, 2, 3}, {0, 2, 4}, {0, 1, 5}, {0, 4, 5}, {1, 3, 5}, {2, 3, 4}
         };
@@ -262,7 +264,7 @@ public class BacktrackingFlowTest {
     }
 
     @Test
-    public void PetersenGraph() {
+    public void _9_PetersenGraph() {
         int[][] a = {
                 {1, 4, 5}, {0, 2, 6}, {1, 3, 7}, {2, 4, 8}, {0, 3, 9},
                 {0, 7, 8}, {1, 8, 9}, {2, 5, 9}, {3, 5, 6}, {4, 6, 7}
@@ -274,7 +276,7 @@ public class BacktrackingFlowTest {
     }
 
     @Test
-    public void flowerSnark2() {
+    public void _9_flowerSnark2() {
         int[][] a = {
                 {2, 1, 1}, {0, 3, 0}, {0, 4, 6}, {1, 5, 7}, {2, 7, 7},
                 {6, 6, 3}, {2, 5, 5}, {4, 3, 4}
