@@ -194,6 +194,7 @@ public class BacktrackingFlowTest {
         flow1.findNowhere0Flows(flows);
         assertEquals(flows.size(), 1);
     }
+
     @Test
     public void simpleMultigraph() {
         int[][] a = {{1, 1}, {0, 0}};
@@ -212,16 +213,18 @@ public class BacktrackingFlowTest {
         NowhereZeroFlow flow1 = new BacktrackingFlow(directedGraph, 4);
         flow1.findNowhere0Flows(flows);
     }
+
     @Test
     public void simpleGraph2() {
         int[][] a = {
                 {1, 3, 4}, {0, 2, 4}, {1, 3, 5}, {0, 2, 5}, {0, 1, 5}, {2, 3, 4}
         };
         DirectedGraph directedGraph = new DirectedGraph(a);
-        NowhereZeroFlow flow = new BacktrackingFlow(directedGraph, 2);
+        NowhereZeroFlow flow = new BacktrackingFlow(directedGraph, 1);
         flow.findNowhere0Flows(flows);
         assertEquals(flows.size(), 1);
     }
+
     @Test
     public void k33() {
         int[][] a = {
@@ -232,6 +235,7 @@ public class BacktrackingFlowTest {
         flow.findNowhere0Flows(flows);
         assertEquals(flows.size(), 1);
     }
+
     @Test
     public void k23() {
         DirectedGraph directedGraph = new DirectedGraph(4);
@@ -245,6 +249,7 @@ public class BacktrackingFlowTest {
         flow1.findNowhere0Flows(flows);
         assertEquals(flows.size(), 1);
     }
+
     @Test
     public void Y2() {
         int[][] a = {
@@ -255,6 +260,7 @@ public class BacktrackingFlowTest {
         flow.findNowhere0Flows(flows);
         assertEquals(flows.size(), 1);
     }
+
     @Test
     public void PetersenGraph() {
         int[][] a = {
@@ -266,11 +272,12 @@ public class BacktrackingFlowTest {
         flow.findNowhere0Flows(flows);
         assertEquals(flows.size(), 1);
     }
+
     @Test
     public void flowerSnark2() {
         int[][] a = {
-                {2,1,1}, {0,3,0}, {0,4,6}, {1,5,7}, {2,7,7},
-                {6,6,3}, {2,5,5}, {4,3,4}
+                {2, 1, 1}, {0, 3, 0}, {0, 4, 6}, {1, 5, 7}, {2, 7, 7},
+                {6, 6, 3}, {2, 5, 5}, {4, 3, 4}
         };
         DirectedGraph directedGraph = new DirectedGraph(a);
         NowhereZeroFlow flow = new BacktrackingFlow(directedGraph, 2);

@@ -6,6 +6,7 @@ import java.util.List;
 
 public class UndirectedGraph implements Graph {
     List<List<Integer>> edges;
+
     public UndirectedGraph(int numOfVertices) {
         this.edges = new ArrayList<>();
         for (int i = 0; i < numOfVertices; i++) {
@@ -25,6 +26,7 @@ public class UndirectedGraph implements Graph {
             }
         }
     }
+
     public UndirectedGraph(List<List<Integer>> edges) {
         this.edges = new ArrayList<>();
         for (int i = 0; i < edges.size(); i++) {
@@ -36,6 +38,7 @@ public class UndirectedGraph implements Graph {
             }
         }
     }
+
     @Override
     public int getNumberOfVertices() {
         return edges.size();
@@ -72,8 +75,8 @@ public class UndirectedGraph implements Graph {
 
     public List<Edge> getAdjacentEdges(int from) {
         List<Edge> res = new ArrayList<>();
-        for (Integer to:
-             adjVertices(from)) {
+        for (Integer to :
+                adjVertices(from)) {
             res.add(new Edge(from, to));
         }
         return res;
@@ -83,8 +86,8 @@ public class UndirectedGraph implements Graph {
     public List<Edge> getIncomingEdges(int to) {
         List<Edge> result = new ArrayList<>();
         for (int from = 0; from < edges.size(); from++) {
-            for (Integer to1:
-                 edges.get(from)) {
+            for (Integer to1 :
+                    edges.get(from)) {
                 if (to1 == to) result.add(new Edge(from, to));
             }
         }
@@ -95,8 +98,8 @@ public class UndirectedGraph implements Graph {
     public List<Edge> getEdgeList() {
         List<Edge> res = new ArrayList<>();
         for (int from = 0; from < edges.size(); from++) {
-            for (Integer to:
-                 edges.get(from)) {
+            for (Integer to :
+                    edges.get(from)) {
                 res.add(new Edge(from, to));
             }
         }

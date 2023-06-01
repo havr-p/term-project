@@ -5,11 +5,9 @@ import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solution;
 import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.constraints.Constraint;
-import org.chocosolver.solver.search.strategy.Search;
 import org.chocosolver.solver.variables.IntVar;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class LPFlow extends NowhereZeroFlow {
 
@@ -185,6 +183,7 @@ public class LPFlow extends NowhereZeroFlow {
         }
         return null;
     }
+
     private void setVarsAndConstraints() {
         if (graph.isDirected()) {
             setVariablesDirected();

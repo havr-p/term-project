@@ -28,6 +28,8 @@ interface Graph {
     List<Edge> getIncomingEdges(int to);
 
     List<Edge> getEdgeList();
+
     List<List<Integer>> adjacentLists();
+
     boolean isDirected();
 }
