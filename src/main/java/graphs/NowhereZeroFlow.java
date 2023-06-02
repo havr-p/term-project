@@ -46,28 +46,7 @@ public abstract class NowhereZeroFlow {
         return this.MAX_FLOW_VALUE;
     }
 
-    /**
-     * @param edgeIndex - vertex, from which we continue to compute required network flow
-     */
-    public void findNowhere0FlowsHelper(int edgeIndex, List<List<Pair<Edge, Integer>>> flows, Graph graph) {
-        if (edgeIndex == this.graph.getNumberOfEdges()) {
-            if (CheckUtil.preservesFlow(graph, flow) && graph.getNumberOfEdges() > 0) {
-                System.out.println(flow);
-                flows.add(Collections.unmodifiableList(deepCopyFlow(flow)));
-            }
-            return;
-        }
-
-        for (int flowValue = 1; flowValue <= MAX_FLOW_VALUE; flowValue++) {
-            setEdgeFlow(edgeIndex, flowValue);
-            findNowhere0FlowsHelper(edgeIndex + 1, flows, graph);
-        }
-    }
 
     public abstract void findNowhere0Flows(List<List<Pair<Edge, Integer>>> flows);
 
-    //only when we have edges u->v and also v->u (what it will be in case of undirected graph)?
-    public boolean shouldAddFlowConstraint() {
-        return false;
-    }
 }

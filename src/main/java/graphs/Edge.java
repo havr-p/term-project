@@ -4,12 +4,21 @@ package graphs;
 public class Edge implements Comparable<Edge> {
     private final int from;
     private final int to;
+    public int index;
 
     public Edge(int from, int to) {
         if (from < 0) throw new IllegalArgumentException("vertex index must be a non-negative integer");
         if (to < 0) throw new IllegalArgumentException("vertex index must be a non-negative integer");
         this.from = from;
         this.to = to;
+    }
+
+    public Edge(int from, int to, int index) {
+        if (from < 0) throw new IllegalArgumentException("vertex index must be a non-negative integer");
+        if (to < 0) throw new IllegalArgumentException("vertex index must be a non-negative integer");
+        this.from = from;
+        this.to = to;
+        this.index = index;
     }
 
 
@@ -21,6 +30,8 @@ public class Edge implements Comparable<Edge> {
     public int to() {
         return to;
     }
+
+    public int index() { return index; }
 
     @Override
     public int compareTo(Edge that) {
@@ -34,6 +45,7 @@ public class Edge implements Comparable<Edge> {
 
         Edge edge = (Edge) o;
 
+        if (index != edge.index) return false;
         if (from != edge.from) return false;
         return to == edge.to;
     }

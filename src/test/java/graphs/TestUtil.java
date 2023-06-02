@@ -8,16 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class TestUtil {
-    public static int factorial(int n) {
-        int fact = 1;
-        for (int i = 2; i <= n; i++) fact *= i;
-        return fact;
-    }
-
+    //for notLP flow see CheckUtil
     public static void assertLPFlowNowhere0(Solution solution) {
         List<IntVar> vars = solution.retrieveIntVars(false);
         for (IntVar v :
@@ -36,7 +30,7 @@ public class TestUtil {
         List<IntVar> vars = solution.retrieveIntVars(false);
         for (IntVar v :
                 vars) {
-            int vertex = parseFromVertexFromVar(v);
+            int vertex = parseFromVertex(v);
             int sum = flow.getOrDefault(vertex, 0) + v.getValue();
             flow.put(vertex, sum);
         }
@@ -46,19 +40,18 @@ public class TestUtil {
         }
     }
 
-    private static int parseFromVertexFromVar(IntVar var) {
+    private static int parseFromVertex(IntVar var) {
         return Integer.parseInt(var.getName().split("_")[1]);
     }
 
     public static void assertAllVIncluded(List<List<Integer>> spanningTree, Graph g) {
         for (int i = 0; i < g.getNumberOfVertices(); i++) {
-            assertTrue(spanningTree.get(i) != null);
+            assertNotNull(spanningTree.get(i));
         }
     }
 
     //A connected graph with V vertices and V-1 edges doesn't contain any cycles by definition
     public static void assertNotContainsCycles(List<List<Integer>> spanningTree, Graph g) {
-        System.out.println(spanningTree);
         int edgeCount = spanningTree.stream().mapToInt(List::size).sum();
         assertEquals(g.getNumberOfVertices() - 1, edgeCount);
     }

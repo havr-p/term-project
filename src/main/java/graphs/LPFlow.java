@@ -13,11 +13,12 @@ import java.util.*;
 public class LPFlow extends NowhereZeroFlow {
 
     private final int V;
-    Model model = new Model("nowhere-zero 5-flow");
+    Model model;
     List<List<List<IntVar>>> edgeVariables = new ArrayList<>();
 
     protected LPFlow(Graph graph, int MAX_FLOW_VALUE) {
         super(graph, MAX_FLOW_VALUE);
+        model = new Model(String.format("nowhere-zero %d-flow", MAX_FLOW_VALUE + 1));
         this.V = graph.getNumberOfVertices();
         for (int i = 0; i < V; i++) {
             edgeVariables.add(new ArrayList<>());
@@ -27,16 +28,6 @@ public class LPFlow extends NowhereZeroFlow {
         }
     }
 
-    public static void main(String[] args) {
-        DirectedGraph directedGraph = new DirectedGraph(4);
-        directedGraph.addEdge(0, 1);
-        directedGraph.addEdge(0, 2);
-        directedGraph.addEdge(1, 3);
-        directedGraph.addEdge(2, 3);
-        NowhereZeroFlow flow = new LPFlow(directedGraph, 4);
-        List<List<Pair<Edge, Integer>>> flows = new ArrayList<>();
-        flow.findNowhere0Flows(flows);
-    }
 
     private void setVariablesDirected() {
         List<List<Integer>> edges = graph.adjacentLists();
@@ -44,9 +35,8 @@ public class LPFlow extends NowhereZeroFlow {
         for (int i = 0; i < V; i++) {
             multi.add(new HashMap<>());
         }
-        for (int i = 0; i < V; i++) {
-            for (int j = 0; j < edges.get(i).size(); j++) {
-                int u = i;
+        for (int u = 0; u < V; u++) {
+            for (int j = 0; j < edges.get(u).size(); j++) {
                 int w = edges.get(u).get(j);
                 int count = multi.get(u).getOrDefault(w, 0);
                 String name = String.format("x_%d_%d_%d", u, w, count);
@@ -76,7 +66,6 @@ public class LPFlow extends NowhereZeroFlow {
                     IntVar edgeVar = model.intVar(name, -MAX_FLOW_VALUE, MAX_FLOW_VALUE);
                     IntVar oppositeEdgeVar = edgeVar.neg().intVar();
                     model.arithm(edgeVar, "!=", 0).post();
-                   // edgeVar.div(oppositeEdgeVar).
                     edgeVariables.get(u).get(w).add(edgeVar);
                     edgeVariables.get(w).get(u).add(oppositeEdgeVar);
                 }
@@ -112,8 +101,8 @@ public class LPFlow extends NowhereZeroFlow {
             List<IntVar> outgoingEdges = new ArrayList<>();
             List<IntVar> ingoingEdges = new ArrayList<>();
             for (int w : uniqueEdges.get(u)) {
-                    outgoingEdges.addAll(Collections.unmodifiableList(edgeVariables.get(u).get(w)));
-                    ingoingEdges.addAll(Collections.unmodifiableList(edgeVariables.get(w).get(u)));
+                outgoingEdges.addAll(Collections.unmodifiableList(edgeVariables.get(u).get(w)));
+                ingoingEdges.addAll(Collections.unmodifiableList(edgeVariables.get(w).get(u)));
 
             }
             System.out.println("adding constraint for vertex " + u);
@@ -191,7 +180,6 @@ public class LPFlow extends NowhereZeroFlow {
     }
 
     private void setVarsAndConstraints() {
-        System.out.println("i am in setVarsAndConstraints");
         if (graph.isDirected()) {
             setVariablesDirected();
             addFlowConstraintsDirected();

@@ -27,13 +27,5 @@ public class CheckUtil {
         }
         return true;
     }
-    public static boolean correctEdgeVariablesUndirected (List<Set<Integer>> lists) {
-        for (int i = 0; i < lists.size(); i++) {
-            for (int to:
-                 lists.get(i)) {
 
-            }
-        }
-        return false;
-    }
 }

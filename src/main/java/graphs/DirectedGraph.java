@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DirectedGraph implements Graph {
     List<List<Edge>> edges;
@@ -32,17 +33,30 @@ public class DirectedGraph implements Graph {
         }
     }
 
-    public DirectedGraph(List<List<Integer>> edges) {
+    public DirectedGraph(List<List<Integer>> edges, boolean indexed) {
         this.numOfVertices = edges.size();
         this.edges = new ArrayList<>();
+        int ind = 0;
         for (int i = 0; i < numOfVertices; i++) {
             this.edges.add(new ArrayList<>());
         }
         for (int i = 0; i < edges.size(); i++) {
             for (int j = 0; j < edges.get(i).size(); j++) {
-                addEdge(i, edges.get(i).get(j));
+                if (!indexed) addEdge(i, edges.get(i).get(j));
+                else addEdge(i, edges.get(i).get(j), ind++);
             }
         }
+    }
+
+    public void indexEdges() {
+        int ind = 0;
+        for (Edge e:
+             getEdgeList()) {
+            e.index = ind++;
+        }
+    }
+    public List<Integer> getIndexes() {
+        return getEdgeList().stream().map(Edge::index).collect(Collectors.toList());
     }
 
 
@@ -67,6 +81,9 @@ public class DirectedGraph implements Graph {
 
     public void addEdge(int from, int to) {
         edges.get(from).add(new Edge(from, to));
+    }
+    public void addEdge(int from, int to, int i) {
+        edges.get(from).add(new Edge(from, to, i));
     }
 
 
