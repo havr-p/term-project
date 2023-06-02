@@ -112,11 +112,14 @@ public class LPFlow extends NowhereZeroFlow {
             List<IntVar> outgoingEdges = new ArrayList<>();
             List<IntVar> ingoingEdges = new ArrayList<>();
             for (int w : uniqueEdges.get(u)) {
-                if (u < w)
                     outgoingEdges.addAll(Collections.unmodifiableList(edgeVariables.get(u).get(w)));
                     ingoingEdges.addAll(Collections.unmodifiableList(edgeVariables.get(w).get(u)));
 
             }
+            System.out.println("adding constraint for vertex " + u);
+            System.out.println("out = " + outgoingEdges);
+            System.out.println("in = " + ingoingEdges);
+            System.out.println();
             if (!ingoingEdges.isEmpty()) {
                 IntVar[] in = ingoingEdges.toArray(new IntVar[0]);
                 IntVar[] out = outgoingEdges.toArray(new IntVar[0]);
