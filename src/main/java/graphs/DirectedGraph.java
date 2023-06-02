@@ -112,7 +112,7 @@ public class DirectedGraph implements Graph {
 
 
     public List<Edge> getEdgeList() {
-        return edges.stream().flatMap(Collection::stream).toList();
+        return edges.stream().flatMap(Collection::stream).collect(Collectors.toCollection(ArrayList::new));
     }
 
 

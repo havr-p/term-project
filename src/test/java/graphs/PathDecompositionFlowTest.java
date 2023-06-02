@@ -45,8 +45,8 @@ public class PathDecompositionFlowTest {
         DirectedGraph directedGraph = new DirectedGraph(2);
         directedGraph.addEdge(0, 1);
         directedGraph.indexEdges();
-        // NowhereZeroFlow flow = new BruteForceFlow(graph,  4);
-        NowhereZeroFlow flow = new BacktrackingFlow(directedGraph, 4);
+        // PathDecompositionFlow flow = new BruteForceFlow(graph,  4);
+        PathDecompositionFlow flow = new PathDecompositionFlow(directedGraph, 4);
         flow.findNowhere0Flows(flows);
         System.out.println(flows.size());
         assertEquals(flow.getMaxFlowValue(), flows.size());
@@ -65,7 +65,7 @@ public class PathDecompositionFlowTest {
         directedGraph.addEdge(0, 1);
         directedGraph.addEdge(1, 2);
         directedGraph.indexEdges();
-        NowhereZeroFlow flow1 = new BacktrackingFlow(directedGraph, 4);
+        PathDecompositionFlow flow1 = new PathDecompositionFlow(directedGraph, 4);
         flow1.findNowhere0Flows(flows);
         for (int i = 1; i < 5; i++) {
             List<Pair<Edge, Integer>> expectedFlow = List.of(new Pair<>(new Edge(0, 1), i),
@@ -88,7 +88,7 @@ public class PathDecompositionFlowTest {
         directedGraph.addEdge(1, 3);
         directedGraph.addEdge(2, 3);
         directedGraph.indexEdges();
-        NowhereZeroFlow flow = new BacktrackingFlow(directedGraph, 4);
+        PathDecompositionFlow flow = new PathDecompositionFlow(directedGraph, 4);
 
         flow.findNowhere0Flows(flows);
         assertThat(flows.size(), is(16));
@@ -104,7 +104,7 @@ public class PathDecompositionFlowTest {
         directedGraph.addEdge(3, 5);
         directedGraph.addEdge(4, 5);
         directedGraph.indexEdges();
-        NowhereZeroFlow flow1 = new BacktrackingFlow(directedGraph, 4);
+        PathDecompositionFlow flow1 = new PathDecompositionFlow(directedGraph, 4);
         flow1.findNowhere0Flows(flows);
         flows.forEach(System.out::println);
         assertThat(flows.size(), is(16));
@@ -113,7 +113,7 @@ public class PathDecompositionFlowTest {
     @Test
     public void _5_emptyFlowTest() {
         DirectedGraph directedGraph = new DirectedGraph(5);
-        NowhereZeroFlow flow = new BacktrackingFlow(directedGraph, 4);
+        PathDecompositionFlow flow = new PathDecompositionFlow(directedGraph, 4);
         flow.findNowhere0Flows(flows);
         assertTrue(flows.isEmpty());
     }
@@ -126,7 +126,7 @@ public class PathDecompositionFlowTest {
         directedGraph.addEdge(1, 3);
         directedGraph.addEdge(2, 3);
         directedGraph.indexEdges();
-        NowhereZeroFlow flow = new BacktrackingFlow(directedGraph, 4);
+        PathDecompositionFlow flow = new PathDecompositionFlow(directedGraph, 4);
         flow.findNowhere0Flows(flows);
         flows.forEach(System.out::println);
         assertFalse(flows.isEmpty());
@@ -146,7 +146,7 @@ public class PathDecompositionFlowTest {
         directedGraph.addEdge(1, 2);
         directedGraph.addEdge(3, 4);
         directedGraph.indexEdges();
-        NowhereZeroFlow flow1 = new BacktrackingFlow(directedGraph, 5);
+        PathDecompositionFlow flow1 = new PathDecompositionFlow(directedGraph, 5);
         flow1.findNowhere0Flows(flows);
         flows.forEach(System.out::println);
         int[][] e = {
@@ -178,7 +178,7 @@ public class PathDecompositionFlowTest {
         directedGraph.addEdge(4, 6);
         directedGraph.addEdge(5, 6);
         directedGraph.indexEdges();
-        NowhereZeroFlow flow1 = new BacktrackingFlow(directedGraph, maxFlow);
+        PathDecompositionFlow flow1 = new PathDecompositionFlow(directedGraph, maxFlow);
         flow1.findNowhere0Flows(flows);
         flows.forEach(System.out::println);
         assertFalse(flows.isEmpty());
@@ -194,7 +194,7 @@ public class PathDecompositionFlowTest {
         directedGraph.addEdge(1, 0);
         directedGraph.addEdge(1, 0);
         directedGraph.indexEdges();
-        NowhereZeroFlow flow1 = new BacktrackingFlow(directedGraph, 1);
+        PathDecompositionFlow flow1 = new PathDecompositionFlow(directedGraph, 1);
         flow1.findNowhere0Flows(flows);
         assertEquals(flows.size(), 1);
     }
@@ -204,7 +204,7 @@ public class PathDecompositionFlowTest {
         int[][] a = {{1, 1}, {0, 0}};
         DirectedGraph directedGraph = new DirectedGraph(a);
         directedGraph.indexEdges();
-        NowhereZeroFlow flow1 = new BacktrackingFlow(directedGraph, 4);
+        PathDecompositionFlow flow1 = new PathDecompositionFlow(directedGraph, 4);
         flow1.findNowhere0Flows(flows);
         assertEquals(flows.size(), 1);
     }
@@ -216,7 +216,7 @@ public class PathDecompositionFlowTest {
         };
         DirectedGraph directedGraph = new DirectedGraph(a);
         directedGraph.indexEdges();
-        NowhereZeroFlow flow1 = new BacktrackingFlow(directedGraph, 4);
+        PathDecompositionFlow flow1 = new PathDecompositionFlow(directedGraph, 4);
         flow1.findNowhere0Flows(flows);
     }
 
@@ -227,7 +227,7 @@ public class PathDecompositionFlowTest {
         };
         DirectedGraph directedGraph = new DirectedGraph(a);
         directedGraph.indexEdges();
-        NowhereZeroFlow flow = new BacktrackingFlow(directedGraph, 1);
+        PathDecompositionFlow flow = new PathDecompositionFlow(directedGraph, 1);
         flow.findNowhere0Flows(flows);
         assertEquals(flows.size(), 1);
     }
@@ -239,7 +239,7 @@ public class PathDecompositionFlowTest {
         };
         DirectedGraph directedGraph = new DirectedGraph(a);
         directedGraph.indexEdges();
-        NowhereZeroFlow flow = new BacktrackingFlow(directedGraph, 2);
+        PathDecompositionFlow flow = new PathDecompositionFlow(directedGraph, 2);
         flow.findNowhere0Flows(flows);
         assertEquals(flows.size(), 1);
     }
@@ -254,7 +254,7 @@ public class PathDecompositionFlowTest {
         directedGraph.addEdge(1, 0);
         directedGraph.addEdge(1, 0);
         directedGraph.indexEdges();
-        NowhereZeroFlow flow1 = new BacktrackingFlow(directedGraph, 2);
+        PathDecompositionFlow flow1 = new PathDecompositionFlow(directedGraph, 2);
         flow1.findNowhere0Flows(flows);
         assertEquals(flows.size(), 1);
     }
@@ -266,7 +266,7 @@ public class PathDecompositionFlowTest {
         };
         DirectedGraph directedGraph = new DirectedGraph(a);
         directedGraph.indexEdges();
-        NowhereZeroFlow flow = new BacktrackingFlow(directedGraph, 2);
+        PathDecompositionFlow flow = new PathDecompositionFlow(directedGraph, 2);
         flow.findNowhere0Flows(flows);
         assertEquals(flows.size(), 1);
     }
@@ -279,7 +279,7 @@ public class PathDecompositionFlowTest {
         };
         DirectedGraph directedGraph = new DirectedGraph(a);
         directedGraph.indexEdges();
-        NowhereZeroFlow flow = new BacktrackingFlow(directedGraph, 2);
+        PathDecompositionFlow flow = new PathDecompositionFlow(directedGraph, 2);
         flow.findNowhere0Flows(flows);
         assertEquals(flows.size(), 1);
     }
@@ -292,7 +292,7 @@ public class PathDecompositionFlowTest {
         };
         DirectedGraph directedGraph = new DirectedGraph(a);
         directedGraph.indexEdges();
-        NowhereZeroFlow flow = new BacktrackingFlow(directedGraph, 2);
+        PathDecompositionFlow flow = new PathDecompositionFlow(directedGraph, 2);
         flow.findNowhere0Flows(flows);
         assertEquals(flows.size(), 1);
     }
