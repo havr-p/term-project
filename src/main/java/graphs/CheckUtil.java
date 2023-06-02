@@ -1,6 +1,7 @@
 package graphs;
 
 import java.util.List;
+import java.util.Set;
 
 public class CheckUtil {
     public static boolean preservesFlow(Graph graph, List<Pair<Edge, Integer>> flow) {
@@ -25,5 +26,14 @@ public class CheckUtil {
             }
         }
         return true;
+    }
+    public static boolean correctEdgeVariablesUndirected (List<Set<Integer>> lists) {
+        for (int i = 0; i < lists.size(); i++) {
+            for (int to:
+                 lists.get(i)) {
+
+            }
+        }
+        return false;
     }
 }
