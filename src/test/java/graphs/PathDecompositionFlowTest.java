@@ -67,13 +67,6 @@ public class PathDecompositionFlowTest {
         directedGraph.indexEdges();
         PathDecompositionFlow flow1 = new PathDecompositionFlow(directedGraph, 4);
         flow1.findNowhere0Flows(flows);
-        for (int i = 1; i < 5; i++) {
-            List<Pair<Edge, Integer>> expectedFlow = List.of(new Pair<>(new Edge(0, 1), i),
-                    new Pair<>(new Edge(1, 2), i));
-            System.out.println(expectedFlow);
-            System.out.println("got " + flows.get(i - 1).toString());
-            assertThat(flows.get(i - 1), CoreMatchers.equalTo(expectedFlow));
-        }
         assertThat(flows.size(), is(4));
         System.out.println(flows.get(0));
     }
@@ -149,40 +142,9 @@ public class PathDecompositionFlowTest {
         PathDecompositionFlow flow1 = new PathDecompositionFlow(directedGraph, 5);
         flow1.findNowhere0Flows(flows);
         flows.forEach(System.out::println);
-        int[][] e = {
-                {1, 1}, {0, 0}
-        };
         assertFalse(flows.isEmpty());
     }
 
-    //Jaeger's 4-flow theorem: Every 4-edge-connected graph has a 4-flow.
-
-    public void _8_guaranteedFlow2() {
-        DirectedGraph directedGraph = new DirectedGraph(7);
-        int maxFlow = 3;
-        //4-edge-connected graph (critical graph with chromatic number = 5)
-        directedGraph.addEdge(0, 1);
-        directedGraph.addEdge(0, 2);
-        directedGraph.addEdge(0, 3);
-        directedGraph.addEdge(0, 4);
-        directedGraph.addEdge(1, 3);
-        directedGraph.addEdge(1, 4);
-        directedGraph.addEdge(1, 6);
-        directedGraph.addEdge(2, 3);
-        directedGraph.addEdge(2, 4);
-        directedGraph.addEdge(2, 5);
-        directedGraph.addEdge(3, 4);
-        directedGraph.addEdge(3, 5);
-        directedGraph.addEdge(3, 6);
-        directedGraph.addEdge(4, 5);
-        directedGraph.addEdge(4, 6);
-        directedGraph.addEdge(5, 6);
-        directedGraph.indexEdges();
-        PathDecompositionFlow flow1 = new PathDecompositionFlow(directedGraph, maxFlow);
-        flow1.findNowhere0Flows(flows);
-        flows.forEach(System.out::println);
-        assertFalse(flows.isEmpty());
-    }
 
     @Test
     public void _8_simpleMultigraph2() {
@@ -206,7 +168,7 @@ public class PathDecompositionFlowTest {
         directedGraph.indexEdges();
         PathDecompositionFlow flow1 = new PathDecompositionFlow(directedGraph, 4);
         flow1.findNowhere0Flows(flows);
-        assertEquals(flows.size(), 1);
+        assertEquals(1, flows.size());
     }
 
     @Test

@@ -31,7 +31,9 @@ public class Edge implements Comparable<Edge> {
         return to;
     }
 
-    public int index() { return index; }
+    public int index() {
+        return index;
+    }
 
     @Override
     public int compareTo(Edge that) {

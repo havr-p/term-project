@@ -7,7 +7,6 @@ import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.search.strategy.Search;
 import org.chocosolver.solver.variables.IntVar;
-import org.chocosolver.util.tools.ArrayUtils;
 
 import java.util.*;
 
@@ -30,6 +29,13 @@ public class LPFlow extends NowhereZeroFlow {
         }
     }
 
+    private static int parseFromVertex(IntVar var) {
+        return Integer.parseInt(var.getName().split("_")[1]);
+    }
+
+    private static int parseToVertex(IntVar var) {
+        return Integer.parseInt(var.getName().split("_")[2]);
+    }
 
     private void setVariablesDirected() {
         List<List<Integer>> edges = graph.adjacentLists();
@@ -76,7 +82,6 @@ public class LPFlow extends NowhereZeroFlow {
         }
     }
 
-
     private void addFlowConstraintsDirected() {
         for (int from = 0; from < V; from++) {
             List<IntVar> outgoingEdges = edgeVariables.get(from).stream().flatMap(Collection::stream).toList();
@@ -120,7 +125,6 @@ public class LPFlow extends NowhereZeroFlow {
             }
         }
     }
-
 
     public void findNowhere0Flows(List<List<Pair<Edge, Integer>>> flows) {
         if (graph.isDirected()) {
@@ -188,11 +192,5 @@ public class LPFlow extends NowhereZeroFlow {
             setEdgeVariablesUndirected();
             addFlowConstraintsUndirected();
         }
-    }
-    private static int parseFromVertex(IntVar var) {
-        return Integer.parseInt(var.getName().split("_")[1]);
-    }
-    private static int parseToVertex(IntVar var) {
-        return Integer.parseInt(var.getName().split("_")[2]);
     }
 }

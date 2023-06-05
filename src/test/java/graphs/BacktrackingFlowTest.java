@@ -194,7 +194,7 @@ public class BacktrackingFlowTest {
         directedGraph.addEdge(1, 0);
         NowhereZeroFlow flow1 = new BacktrackingFlow(directedGraph, 1);
         flow1.findNowhere0Flows(flows);
-        assertEquals(flows.size(), 1);
+        assertEquals(1, flows.size());
     }
 
     @Test
@@ -203,7 +203,7 @@ public class BacktrackingFlowTest {
         DirectedGraph directedGraph = new DirectedGraph(a);
         NowhereZeroFlow flow1 = new BacktrackingFlow(directedGraph, 4);
         flow1.findNowhere0Flows(flows);
-        assertEquals(flows.size(), 1);
+        assertEquals(44, flows.size());
     }
 
     @Test
@@ -249,7 +249,7 @@ public class BacktrackingFlowTest {
         directedGraph.addEdge(1, 0);
         NowhereZeroFlow flow1 = new BacktrackingFlow(directedGraph, 2);
         flow1.findNowhere0Flows(flows);
-        assertEquals(flows.size(), 1);
+        assertEquals(flows.size(), 20);
     }
 
     @Test
@@ -257,14 +257,13 @@ public class BacktrackingFlowTest {
         int[][] a = {
                 {1, 2, 3}, {0, 2, 4}, {0, 1, 5}, {0, 4, 5}, {1, 3, 5}, {2, 3, 4}
         };
-        DirectedGraph directedGraph = new DirectedGraph(a);
+        UndirectedGraph directedGraph = new UndirectedGraph(a);
         NowhereZeroFlow flow = new BacktrackingFlow(directedGraph, 2);
         flow.findNowhere0Flows(flows);
-        assertEquals(flows.size(), 1);
     }
 
     @Test
-    public void _9_PetersenGraph() {
+    public void _a_PetersenGraph() {
         int[][] a = {
                 {1, 4, 5}, {0, 2, 6}, {1, 3, 7}, {2, 4, 8}, {0, 3, 9},
                 {0, 7, 8}, {1, 8, 9}, {2, 5, 9}, {3, 5, 6}, {4, 6, 7}

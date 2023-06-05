@@ -1,7 +1,6 @@
 package graphs;
 
 import java.util.List;
-import java.util.Set;
 
 public class CheckUtil {
     public static boolean preservesFlow(Graph graph, List<Pair<Edge, Integer>> flow) {

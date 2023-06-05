@@ -6,9 +6,7 @@ import org.junit.rules.TestName;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import static org.junit.Assert.*;
 
@@ -38,7 +36,7 @@ public class SpanningTreeTest {
         directedGraph.addEdge(0, 2);
         directedGraph.addEdge(2, 3);
         PathDecompositionFlow flow = new PathDecompositionFlow(directedGraph, 1);
-        List<List<Integer>> spanningTree = flow.getSpanningTree();
+        List<List<Integer>> spanningTree = flow.getIndexedSpanningTree();
         boolean[] contains = new boolean[numVertices];
         for (int from = 0; from < spanningTree.size(); from++) {
             for (int to = 0; to < spanningTree.get(from).size(); to++) {
@@ -58,7 +56,7 @@ public class SpanningTreeTest {
         List<List<Integer>> expectedTree = List.of(
                 List.of()
         );
-        assertEquals(expectedTree, new PathDecompositionFlow(g, 1).getSpanningTree());
+        assertEquals(expectedTree, new PathDecompositionFlow(g, 1).getIndexedSpanningTree());
     }
 
     @Test
@@ -72,7 +70,7 @@ public class SpanningTreeTest {
                 List.of(1),
                 List.of()
         );
-        assertEquals(expectedTree, new PathDecompositionFlow(g, 1).getSpanningTree());
+        assertEquals(expectedTree, new PathDecompositionFlow(g, 1).getIndexedSpanningTree());
     }
 
     @Test
@@ -83,12 +81,7 @@ public class SpanningTreeTest {
                 List.of(1)
         );
         DirectedGraph g = new DirectedGraph(graph, false);
-        List<List<Integer>> expectedTree = List.of(
-                List.of(1),
-                List.of(2),
-                List.of()
-        );
-        List<List<Integer>> spanningTree = new PathDecompositionFlow(g, 1).getSpanningTree();
+        List<List<Integer>> spanningTree = new PathDecompositionFlow(g, 1).getIndexedSpanningTree();
         TestUtil.assertAllVIncluded(spanningTree, g);
         TestUtil.assertNotContainsCycles(spanningTree, g);
     }
@@ -101,7 +94,7 @@ public class SpanningTreeTest {
                 List.of(0, 1)
         );
         DirectedGraph g = new DirectedGraph(graph, false);
-        List<List<Integer>> spanningTree = new PathDecompositionFlow(g, 1).getSpanningTree();
+        List<List<Integer>> spanningTree = new PathDecompositionFlow(g, 1).getIndexedSpanningTree();
         TestUtil.assertAllVIncluded(spanningTree, g);
         TestUtil.assertNotContainsCycles(spanningTree, g);
     }
@@ -115,7 +108,7 @@ public class SpanningTreeTest {
                 List.of(0, 2)
         );
         DirectedGraph g = new DirectedGraph(graph, false);
-        List<List<Integer>> spanningTree = new PathDecompositionFlow(g, 1).getSpanningTree();
+        List<List<Integer>> spanningTree = new PathDecompositionFlow(g, 1).getIndexedSpanningTree();
         TestUtil.assertAllVIncluded(spanningTree, g);
         TestUtil.assertNotContainsCycles(spanningTree, g);
     }
@@ -130,7 +123,7 @@ public class SpanningTreeTest {
                 List.of(0, 3)
         );
         DirectedGraph g = new DirectedGraph(graph, false);
-        List<List<Integer>> spanningTree = new PathDecompositionFlow(g, 1).getSpanningTree();
+        List<List<Integer>> spanningTree = new PathDecompositionFlow(g, 1).getIndexedSpanningTree();
         TestUtil.assertAllVIncluded(spanningTree, g);
         TestUtil.assertNotContainsCycles(spanningTree, g);
     }
@@ -150,7 +143,7 @@ public class SpanningTreeTest {
                 List.of(4, 6, 7)
         );
         DirectedGraph g = new DirectedGraph(graph, false);
-        List<List<Integer>> spanningTree = new PathDecompositionFlow(g, 1).getSpanningTree();
+        List<List<Integer>> spanningTree = new PathDecompositionFlow(g, 1).getIndexedSpanningTree();
         TestUtil.assertAllVIncluded(spanningTree, g);
         TestUtil.assertNotContainsCycles(spanningTree, g);
     }
@@ -165,14 +158,7 @@ public class SpanningTreeTest {
                 List.of(3)
         );
         DirectedGraph g = new DirectedGraph(graph, false);
-        List<List<Integer>> expectedTree = List.of(
-                List.of(1),
-                List.of(),
-                List.of(),
-                List.of(4),
-                List.of()
-        );
-        List<List<Integer>> spanningTree = new PathDecompositionFlow(g, 1).getSpanningTree();
+        List<List<Integer>> spanningTree = new PathDecompositionFlow(g, 1).getIndexedSpanningTree();
         TestUtil.assertAllVIncluded(spanningTree, g);
         int edgeCount = spanningTree.stream().mapToInt(List::size).sum();
         assertNotEquals(g.getNumberOfVertices() - 1, edgeCount);

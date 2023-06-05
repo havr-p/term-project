@@ -103,8 +103,9 @@ public class LPFlowTest {
     public void emptyFlowTest() {
         DirectedGraph directedGraph = new DirectedGraph(5);
         LPFlow flow = new LPFlow(directedGraph, 4);
-        flow.findNowhere0Flows(flows);
-        assertTrue(flows.isEmpty());
+        Solution s = flow.getSolution();
+        TestUtil.assertLPFlowIsAFlow(s);
+        TestUtil.assertLPFlowNowhere0(s);
     }
 
     @Test
@@ -243,7 +244,6 @@ public class LPFlowTest {
         TestUtil.assertLPFlowIsAFlow(s);
         TestUtil.assertLPFlowNowhere0(s);
     }
-
 
 
     @Test

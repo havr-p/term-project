@@ -42,19 +42,24 @@ public class DirectedGraph implements Graph {
         }
         for (int i = 0; i < edges.size(); i++) {
             for (int j = 0; j < edges.get(i).size(); j++) {
-                if (!indexed) addEdge(i, edges.get(i).get(j));
-                else addEdge(i, edges.get(i).get(j), ind++);
+                int from = i;
+                int to = edges.get(i).get(j);
+                if (from < to) {
+                    if (!indexed) addEdge(from, to);
+                    else addEdge(from, to, ind++);
+                }
             }
         }
     }
 
     public void indexEdges() {
         int ind = 0;
-        for (Edge e:
-             getEdgeList()) {
+        for (Edge e :
+                getEdgeList()) {
             e.index = ind++;
         }
     }
+
     public List<Integer> getIndexes() {
         return getEdgeList().stream().map(Edge::index).collect(Collectors.toList());
     }
@@ -82,6 +87,7 @@ public class DirectedGraph implements Graph {
     public void addEdge(int from, int to) {
         edges.get(from).add(new Edge(from, to));
     }
+
     public void addEdge(int from, int to, int i) {
         edges.get(from).add(new Edge(from, to, i));
     }

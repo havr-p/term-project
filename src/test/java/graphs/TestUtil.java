@@ -47,6 +47,7 @@ public class TestUtil {
     private static int parseFromVertex(IntVar var) {
         return Integer.parseInt(var.getName().split("_")[1]);
     }
+
     private static int parseToVertex(IntVar var) {
         return Integer.parseInt(var.getName().split("_")[2]);
     }
