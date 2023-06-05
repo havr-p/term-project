@@ -1,6 +1,5 @@
-# term-project
-
-Ročníkový projekt  
+# Ročníkový projekt
+ 
 Názov projektu: Overovanie existencie nikde-nulového 5-toku
 
 Meno študenta: Havriil Pietukhin
