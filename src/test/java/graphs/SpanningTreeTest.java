@@ -87,7 +87,9 @@ public class SpanningTreeTest {
                 List.of(2),
                 List.of()
         );
-        assertEquals(expectedTree, new PathDecompositionFlow(g, 1).getSpanningTree());
+        var spanningTree = new PathDecompositionFlow(g, 1).getSpanningTree();
+        TestUtil.assertAllVIncluded(spanningTree, g);
+        TestUtil.assertNotContainsCycles(spanningTree, g);
     }
 
     @Test

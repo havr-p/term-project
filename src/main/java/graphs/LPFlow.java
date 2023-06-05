@@ -7,6 +7,7 @@ import org.chocosolver.solver.Solver;
 import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.search.strategy.Search;
 import org.chocosolver.solver.variables.IntVar;
+import org.chocosolver.util.tools.ArrayUtils;
 
 import java.util.*;
 
@@ -15,6 +16,7 @@ public class LPFlow extends NowhereZeroFlow {
     private final int V;
     Model model;
     List<List<List<IntVar>>> edgeVariables = new ArrayList<>();
+    Set<IntVar> recordedVariables = new HashSet<>();
 
     protected LPFlow(Graph graph, int MAX_FLOW_VALUE) {
         super(graph, MAX_FLOW_VALUE);
@@ -68,6 +70,7 @@ public class LPFlow extends NowhereZeroFlow {
                     model.arithm(edgeVar, "!=", 0).post();
                     edgeVariables.get(u).get(w).add(edgeVar);
                     edgeVariables.get(w).get(u).add(oppositeEdgeVar);
+                    recordedVariables.add(edgeVar);
                 }
             }
         }
@@ -129,11 +132,6 @@ public class LPFlow extends NowhereZeroFlow {
         }
         //prepared to solve
         Solver solver = model.getSolver();
-       /* solver.setSearch(Search.inputOrderLBSearch(
-                edgeVariables.stream().flatMap(Collection::stream)
-                        .flatMap(Collection::stream)
-                        .toArray(IntVar[]::new)
-        ));*/
         System.out.println(model);
         if (solver.solve()) {
             Solution solution = new Solution(model);
