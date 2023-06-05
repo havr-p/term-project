@@ -36,9 +36,7 @@ public abstract class NowhereZeroFlow {
     }
 
     public void setEdgeFlow(int edgeIndex, int value) {
-        //System.out.println("was " + flow);
         flow.get(edgeIndex).setB(value);
-        //System.out.println("now " + flow);
     }
 
 

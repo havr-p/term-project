@@ -14,4 +14,4 @@ Email: lukotka at dcs.fmph.uniba.sk
 Špecifikácia projektu: Cieľom projektu je implementovať 3 algoritmy na overovanie existencie NN 5-toku: triviálny
 backtrack, dynamické programovanie založené na cestových dekompozíciách, zmiešané lineárne programovanie. 
 
-  Aby ste mohli spustit tento projekt, potrebujete vyuzit 
+  Requirements: Java 8+
