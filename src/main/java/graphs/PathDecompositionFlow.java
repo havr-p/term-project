@@ -68,19 +68,23 @@ public class PathDecompositionFlow extends NowhereZeroFlow {
         double[][] dirMatrix = getDirectionMatrix();
         findNowhere0FlowsHelper(0, flows, dirMatrix);
     }
-    private void findNowhere0FlowsHelper(int index, List<List<Pair<Edge, Integer>>> flows,
-                                         double[][] dirMatrix) {
+    private void findNowhere0FlowsHelper(int index, List<List<Pair<Edge, Integer>>> flows, double[][] dirMatrix) {
         if (index == this.spanningTreeGraph.getNumberOfEdges()) {
             if (CheckUtil.preservesFlow(spanningTreeGraph, spanningTreeFlow) && spanningTreeGraph.getNumberOfEdges() > 0) {
                 System.out.println(spanningTreeFlow);
-                double[] stArr = spanningTreeFlow.stream()
-                        .mapToDouble(edgeIntegerPair -> edgeIntegerPair.getB().doubleValue())
-                        .toArray();
-                double[] nstArr = getNotSpanningTreeValues(stArr, dirMatrix);
-                if (nstIsNowhere0(nstArr)) {
-                flow = constructResultingFlow(spanningTreeFlow, nstArr, matrixRowToIndex);
-                if (nstIsNowhere0(nstArr) && CheckUtil.preservesFlow(graph, flow)) {
-                    flows.add(Collections.unmodifiableList(deepCopyFlow(flow)));
+                if (this.spanningTreeGraph.getNumberOfEdges() == this.graph.getNumberOfEdges()) {
+                    flows.add(Collections.unmodifiableList(deepCopyFlow(spanningTreeFlow)));
+                } else {
+                    double[] stArr = spanningTreeFlow.stream()
+                            .mapToDouble(edgeIntegerPair -> edgeIntegerPair.getB().doubleValue())
+                            .toArray();
+                    System.out.println(Arrays.toString(stArr));
+                    double[] nstArr = getNotSpanningTreeValues(stArr, dirMatrix);
+                    if (nstIsNowhere0(nstArr)) {
+                        flow = constructResultingFlow(spanningTreeFlow, nstArr, matrixRowToIndex);
+                        if (nstIsNowhere0(nstArr) && CheckUtil.preservesFlow(graph, flow)) {
+                            flows.add(Collections.unmodifiableList(deepCopyFlow(flow)));
+                        }
                     }
                 }
             }
@@ -92,6 +96,7 @@ public class PathDecompositionFlow extends NowhereZeroFlow {
             findNowhere0FlowsHelper(index + 1, flows, dirMatrix);
         }
     }
+
 
     private DirectedGraph createGraphFromSpanningTree() {
         DirectedGraph st = new DirectedGraph(this.graph.getNumberOfVertices());
@@ -108,6 +113,8 @@ public class PathDecompositionFlow extends NowhereZeroFlow {
     private double[] getNotSpanningTreeValues(double[] spanningTreeArr, double[][] directionMatrix) {
         RealMatrix m = MatrixUtils.createRealMatrix(directionMatrix);
         RealMatrix n = MatrixUtils.createRowRealMatrix(spanningTreeArr);
+        System.out.println(m);
+        System.out.println(n);
         RealMatrix notST = m.multiply(n);
         System.out.println(notST);
         return notST.getRow(0);
