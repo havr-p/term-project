@@ -117,7 +117,7 @@ public class PathDecompositionFlow extends NowhereZeroFlow {
     private DirectedGraph createGraphFromSpanningTree() {
         DirectedGraph st = new DirectedGraph(this.graph.getNumberOfVertices());
         for (int from = 0; from < this.spanningTree.size(); from++) {
-            for (var pair : this.spanningTree.get(from)) {
+            for (Pair<Integer, Integer> pair : this.spanningTree.get(from)) {
                 st.addEdge(from, pair.getB(), pair.getA());
             }
         }

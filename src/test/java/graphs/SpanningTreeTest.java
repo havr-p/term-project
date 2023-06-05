@@ -87,7 +87,7 @@ public class SpanningTreeTest {
                 List.of(2),
                 List.of()
         );
-        var spanningTree = new PathDecompositionFlow(g, 1).getSpanningTree();
+        List<List<Integer>> spanningTree = new PathDecompositionFlow(g, 1).getSpanningTree();
         TestUtil.assertAllVIncluded(spanningTree, g);
         TestUtil.assertNotContainsCycles(spanningTree, g);
     }
@@ -177,8 +177,4 @@ public class SpanningTreeTest {
         assertNotEquals(g.getNumberOfVertices() - 1, edgeCount);
     }
 
-    @Test
-    public void testSpanningTree_largeGraph() {
-        // Omitted for brevity; construct a large graph and its expected spanning tree.
-    }
 }
