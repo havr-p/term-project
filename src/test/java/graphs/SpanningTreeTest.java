@@ -8,6 +8,7 @@ import org.junit.runner.Description;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.Assert.*;
 
@@ -45,7 +46,7 @@ public class SpanningTreeTest {
                 contains[to] = true;
             }
         }
-        assertFalse(Arrays.asList(contains).contains(false));
+        assertFalse(List.of(contains).contains(false));
     }
 
     @Test

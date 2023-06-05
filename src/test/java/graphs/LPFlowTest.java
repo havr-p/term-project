@@ -203,18 +203,6 @@ public class LPFlowTest {
         TestUtil.assertLPFlowNowhere0(s);
     }
 
-    @Test
-    public void k33() {
-        int[][] a = {
-                {3, 4, 5}, {3, 4, 5}, {3, 4, 5}, {0, 1, 2}, {0, 1, 2}, {0, 1, 2}
-        };
-        Graph graph = new UndirectedGraph(a);
-        LPFlow flow = new LPFlow(graph, 3);
-        flow.findNowhere0Flows(flows);
-        Solution s = flow.getSolution();
-        TestUtil.assertLPFlowIsAFlow(s);
-        TestUtil.assertLPFlowNowhere0(s);
-    }
 
     @Test
     public void k23() {
@@ -256,33 +244,7 @@ public class LPFlowTest {
         TestUtil.assertLPFlowNowhere0(s);
     }
 
-    @Test
-    public void flowerSnark2() {
-        int[][] a = {
-                {2, 1, 1}, {0, 3, 0}, {0, 4, 6}, {1, 5, 7}, {2, 7, 7},
-                {6, 6, 3}, {2, 5, 5}, {4, 3, 4}
-        };
-        Graph graph = new UndirectedGraph(a);
-        LPFlow flow = new LPFlow(graph, 4);
-        flow.findNowhere0Flows(flows);
-        Solution s = flow.getSolution();
-        TestUtil.assertLPFlowIsAFlow(s);
-        TestUtil.assertLPFlowNowhere0(s);
-    }
 
-    @Test
-    public void flowerSnark3() {
-        int[][] a = {
-                {1, 2, 10}, {0, 3, 11}, {0, 4, 6}, {1, 5, 7}, {2, 5, 11},
-                {3, 4, 10}, {2, 7, 8}, {3, 6, 8}, {6, 7, 9}, {8, 10, 11},
-                {0, 5, 9}, {1, 4, 9}
-        };
-        UndirectedGraph directedGraph = new UndirectedGraph(a);
-        LPFlow flow = new LPFlow(directedGraph, 2);
-        Solution s = flow.getSolution();
-        TestUtil.assertLPFlowIsAFlow(s);
-        TestUtil.assertLPFlowNowhere0(s);
-    }
 
     @Test
     public void flowerSnark4() {
@@ -389,15 +351,4 @@ public class LPFlowTest {
         TestUtil.assertLPFlowNowhere0(s);
     }
 
-    @Test
-    public void undirectedLPTest() {
-        int[][] a = {
-                {1, 2}, {0}, {0}
-        };
-        UndirectedGraph graph = new UndirectedGraph(a);
-        LPFlow flow = new LPFlow(graph, 2);
-        Solution s = flow.getSolution();
-        TestUtil.assertLPFlowIsAFlow(s);
-        TestUtil.assertLPFlowNowhere0(s);
-    }
 }

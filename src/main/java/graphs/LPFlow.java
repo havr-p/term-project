@@ -145,7 +145,9 @@ public class LPFlow extends NowhereZeroFlow {
                 IntVar v = vars.get(i).intVar();
                 System.out.println(vars.get(i).getName() +
                         ":  " + vars.get(i).getValue());
-                flow.add(new Pair<>(new Edge(parseFromVertex(v), parseToVertex(v)), solution.getIntVal(v)));
+                String name = vars.get(i).getName();
+                if (name.matches("^*x.*"))
+                    flow.add(new Pair<>(new Edge(parseFromVertex(v), parseToVertex(v)), solution.getIntVal(v)));
             }
             flows.add(Collections.unmodifiableList(deepCopyFlow(flow)));
             System.out.println("__________________END__________________");

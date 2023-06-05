@@ -30,9 +30,13 @@ public class TestUtil {
         List<IntVar> vars = solution.retrieveIntVars(false);
         for (IntVar v :
                 vars) {
-            int vertex = parseFromVertex(v);
-            int sum = flow.getOrDefault(vertex, 0) + v.getValue();
-            flow.put(vertex, sum);
+            int from, to;
+            from = parseFromVertex(v);
+            to = parseToVertex(v);
+            int sum = flow.getOrDefault(from, 0) + v.getValue();
+            flow.put(from, sum);
+            sum = flow.getOrDefault(to, 0) - v.getValue();
+            flow.put(to, sum);
         }
         for (int val :
                 flow.values()) {
@@ -42,6 +46,9 @@ public class TestUtil {
 
     private static int parseFromVertex(IntVar var) {
         return Integer.parseInt(var.getName().split("_")[1]);
+    }
+    private static int parseToVertex(IntVar var) {
+        return Integer.parseInt(var.getName().split("_")[2]);
     }
 
 
