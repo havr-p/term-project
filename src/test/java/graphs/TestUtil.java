@@ -44,6 +44,7 @@ public class TestUtil {
         return Integer.parseInt(var.getName().split("_")[1]);
     }
 
+
     public static void assertAllVIncluded(List<List<Integer>> spanningTree, Graph g) {
         for (int i = 0; i < g.getNumberOfVertices(); i++) {
             assertNotNull(spanningTree.get(i));

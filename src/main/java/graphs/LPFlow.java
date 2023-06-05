@@ -133,21 +133,21 @@ public class LPFlow extends NowhereZeroFlow {
         //prepared to solve
         Solver solver = model.getSolver();
         System.out.println(model);
-        if (solver.solve()) {
+        while (solver.solve()) {
             Solution solution = new Solution(model);
             solution.record();
             List<IntVar> vars = solution.retrieveIntVars(true);
+            if (vars.isEmpty() || (!vars.get(0).getName().matches("^x.*"))) return;
             List<Pair<Edge, Integer>> flow = new ArrayList<>();
-            for (int i = 0; i < vars.size(); i++) {
-                IntVar v = vars.get(i);
-
-            }
             System.out.println(solver.getSearchState());
             System.out.println("________________SOLUTION________________");
             for (int i = 0; i < vars.size(); i++) {
+                IntVar v = vars.get(i).intVar();
                 System.out.println(vars.get(i).getName() +
                         ":  " + vars.get(i).getValue());
+                flow.add(new Pair<>(new Edge(parseFromVertex(v), parseToVertex(v)), solution.getIntVal(v)));
             }
+            flows.add(Collections.unmodifiableList(deepCopyFlow(flow)));
             System.out.println("__________________END__________________");
             // do something, e.g. print out variable values
         }
@@ -163,6 +163,7 @@ public class LPFlow extends NowhereZeroFlow {
             Solution s = new Solution(model);
             s.record();
             List<IntVar> vars = s.retrieveIntVars(true);
+            if (vars.isEmpty()) return null;
             System.out.println(vars);
             System.out.println(solver.getSearchState());
             System.out.println("________________SOLUTION________________");
@@ -185,5 +186,11 @@ public class LPFlow extends NowhereZeroFlow {
             setEdgeVariablesUndirected();
             addFlowConstraintsUndirected();
         }
+    }
+    private static int parseFromVertex(IntVar var) {
+        return Integer.parseInt(var.getName().split("_")[1]);
+    }
+    private static int parseToVertex(IntVar var) {
+        return Integer.parseInt(var.getName().split("_")[2]);
     }
 }
