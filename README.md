@@ -14,4 +14,4 @@ Email: lukotka at dcs.fmph.uniba.sk
 backtrack, dynamické programovanie založené na cestových dekompozíciách, zmiešané lineárne programovanie.  
 Stránka projektu: http://www.st.fmph.uniba.sk/~pietukhin1/
 
-Requirements: Java 8+
+Requirements: Java 8+, Maven
