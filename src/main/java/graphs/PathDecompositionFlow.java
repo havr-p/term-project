@@ -18,12 +18,9 @@ public class PathDecompositionFlow extends NowhereZeroFlow {
     PathDecompositionFlow(DirectedGraph graph, int maxFlowValue) {
         super(graph, maxFlowValue);
         graph.indexEdges();
-        System.out.println("original graph");
-        System.out.println(graph.getEdgeList());
         indexedSpanningTree = DFS(0);
+        System.out.println("Indexed spanning tree created by DFS: " + indexedSpanningTree);
         this.spanningTreeGraph = createGraphFromSpanningTree();
-        System.out.println("Spanning tree graph");
-        System.out.println(spanningTreeGraph.getEdgeList());
         List<Edge> spanningTreeEdges = spanningTreeGraph.getEdgeList();
         List<Edge> notSpanTreeEdges = graph.getEdgeList();
         notSpanTreeEdges.removeAll(spanningTreeEdges);
@@ -45,7 +42,6 @@ public class PathDecompositionFlow extends NowhereZeroFlow {
                 .toList();
 
         for (Pair<Integer, Integer> indexVertexPair : adjacentEdges) {
-            System.out.println("index-vertex pair:\n" + indexVertexPair);
             if (!visited[indexVertexPair.getA()]) {
                 tree.get(v).add(indexVertexPair);
                 DFSUtil(indexVertexPair.getA(), visited, tree, v);
@@ -77,12 +73,9 @@ public class PathDecompositionFlow extends NowhereZeroFlow {
         return result;
     }
     private DirectedGraph createGraphFromSpanningTree() {
-        System.out.println("start of createGraphFromSpanningTree");
         DirectedGraph st = new DirectedGraph(this.graph.getNumberOfVertices());
         for (int from = 0; from < this.indexedSpanningTree.size(); from++) {
-            System.out.println("from: " + from);
             for (Pair<Integer, Integer> pair : this.indexedSpanningTree.get(from)) {
-                System.out.println( "while calling st.addEdge pair.getA() was " + pair.getA() + "\n pair.getB() was " + pair.getB());
                 st.addEdge(from, pair.getA(), pair.getB());
             }
         }
@@ -91,6 +84,7 @@ public class PathDecompositionFlow extends NowhereZeroFlow {
 
     public void findNowhere0Flows(List<List<Pair<Edge, Integer>>> flows) {
         double[][] dirMatrix = getDirectionMatrix();
+        System.out.println("Direction Matrix: " + Arrays.deepToString(dirMatrix));
         findNowhere0FlowsHelper(0, flows, dirMatrix);
     }
 
@@ -104,14 +98,13 @@ public class PathDecompositionFlow extends NowhereZeroFlow {
                     double[] stArr = spanningTreeFlow.stream()
                             .mapToDouble(edgeIntegerPair -> edgeIntegerPair.getB().doubleValue())
                             .toArray();
+                    System.out.println("starr: ");
                     System.out.println(Arrays.toString(stArr));
-                    double[] nstArr = getNotSpanningTreeValues(stArr, dirMatrix);
-                    if (nstIsNowhere0(nstArr)) {
-                        flow = constructResultingFlow(spanningTreeFlow, nstArr, matrixRowToIndex);
-                        System.out.println("result flow");
-                        System.out.println(flow);
+                    setNotSpanningTreeValues(stArr, dirMatrix);
+                    System.out.println("Not Spanning Tree Flow after set: " + notSpanningTreeFlow);
+                    if (nstIsNowhere0()) {
+                        flow = constructResultingFlow(spanningTreeFlow);
                         if (CheckUtil.preservesFlow(graph, flow)) {
-                            System.out.println("flow added");
                             flows.add(Collections.unmodifiableList(deepCopyFlow(flow)));
                         }
                     }
@@ -122,23 +115,24 @@ public class PathDecompositionFlow extends NowhereZeroFlow {
 
         for (int flowValue = 1; flowValue <= MAX_FLOW_VALUE; flowValue++) {
             spanningTreeFlow.get(index).setB(flowValue);
+            System.out.println("Index: " + index + ", Spanning Tree Flow: " + spanningTreeFlow);
             findNowhere0FlowsHelper(index + 1, flows, dirMatrix);
         }
     }
 
 
-    private double[] getNotSpanningTreeValues(double[] spanningTreeArr, double[][] directionMatrix) {
+    private void setNotSpanningTreeValues(double[] spanningTreeArr, double[][] directionMatrix) {
         RealMatrix m = MatrixUtils.createRealMatrix(directionMatrix);
         RealMatrix n = MatrixUtils.createColumnRealMatrix(spanningTreeArr);
-        /*System.out.println("m");
-        System.out.println(m);
-        System.out.println("n");
-        System.out.println(n);*/
+
         RealMatrix notST = m.multiply(n);
-        /*System.out.println("product");
-        System.out.println(notST);*/
-        return notST.getColumn(0);
+        double[] notSTArray = notST.getColumn(0);
+
+        for (int i = 0; i < notSpanningTreeFlow.size(); i++) {
+            notSpanningTreeFlow.get(i).setB((int) notSTArray[i]);
+        }
     }
+
 
 
     public double[][] getDirectionMatrix() {
@@ -149,7 +143,6 @@ public class PathDecompositionFlow extends NowhereZeroFlow {
         double[][] matrixData = new double[notInSpanningTreeEdges.size()][spanningTreeGraph.getNumberOfEdges()];
         for (int i = 0; i < matrixData.length; i++) {
             Edge e = notInSpanningTreeEdges.get(i);
-            matrixRowToIndex.add(e.index);
             for (int j = 0; j < matrixData[i].length; j++) {
                 Edge se = spanningTreeEdges.get(j);
                 matrixData[i][j] = orientation(e, se);
@@ -171,25 +164,22 @@ public class PathDecompositionFlow extends NowhereZeroFlow {
         return 0;
     }
 
-    private boolean nstIsNowhere0(double[] nstEdges) {
-        for (double v :
-                nstEdges) {
-            if (v == 0) return false;
+    private boolean nstIsNowhere0() {
+        for (Pair<Edge, Integer> edgeFlowPair : notSpanningTreeFlow) {
+            if (edgeFlowPair.getB() == 0) {
+                return false;
+            }
         }
         return true;
     }
 
     //suppose edges in flow and helping flow are indexed
-    private List<Pair<Edge, Integer>> constructResultingFlow(List<Pair<Edge, Integer>> spanningTreeFlow,
-                                                             double[] nstEdges,
-                                                             List<Integer> matrixRowToIndex) {
-        //get edges from helping flow and edges which are not in spanning tree
-        List<Edge> allEdges = graph.getEdgeList();
+    private List<Pair<Edge, Integer>> constructResultingFlow(List<Pair<Edge, Integer>> spanningTreeFlow) {
         List<Pair<Edge, Integer>> resultFlow = new ArrayList<>(spanningTreeFlow);
-        for (int i = 0; i < matrixRowToIndex.size(); i++
-        ) {
-            resultFlow.add(new Pair<>(allEdges.get(matrixRowToIndex.get(i)), (int) nstEdges[i]));
+        for (Pair<Edge, Integer> edgeFlowPair : notSpanningTreeFlow) {
+            resultFlow.add(new Pair<>(edgeFlowPair.getA(), edgeFlowPair.getB()));
         }
+        System.out.println("Constructed Resulting Flow: " + resultFlow);
         return resultFlow;
     }
 }

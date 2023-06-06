@@ -45,7 +45,6 @@ public class PathDecompositionFlowTest {
         DirectedGraph directedGraph = new DirectedGraph(2);
         directedGraph.addEdge(0, 1);
         directedGraph.indexEdges();
-        // PathDecompositionFlow flow = new BruteForceFlow(graph,  4);
         PathDecompositionFlow flow = new PathDecompositionFlow(directedGraph, 4);
         flow.findNowhere0Flows(flows);
         System.out.println(flows.size());

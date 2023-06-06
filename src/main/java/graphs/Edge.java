@@ -60,7 +60,7 @@ public class Edge implements Comparable<Edge> {
     }
 
     public String toString() {
-        return String.format("%d->%d", from, to);
+        return String.format("i:%d %d->%d", index, from, to);
     }
 
 
